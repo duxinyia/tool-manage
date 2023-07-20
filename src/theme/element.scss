@@ -69,6 +69,7 @@
 // 鼠标 hover 时颜色
 .el-menu-hover-bg-color {
 	background-color: var(--next-bg-menuBarActiveColor) !important;
+	color:white !important;
 }
 // 默认样式修改
 .el-menu {
@@ -170,7 +171,7 @@
 		}
 		.el-menu-item.is-active,
 		.el-sub-menu.is-active .el-sub-menu__title {
-			color: var(--el-menu-active-color);
+			color: var(--next-bg-menuBarColor);
 		}
 	}
 }

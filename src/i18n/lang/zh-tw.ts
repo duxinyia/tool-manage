@@ -2,7 +2,7 @@
 export default {
 	router: {
 		home: '首頁',
-		system: '系統設置',
+		system: '基本資料維護',
 		systemMenu: '選單管理',
 		systemRole: '角色管理',
 		systemUser: '用戶管理',
@@ -181,12 +181,5 @@ export default {
 		copyTextSuccess: '複製成功！',
 		copyTextError: '複製失敗！',
 	},
-	upgrade: {
-		title: '新版本陞級',
-		msg: '新版本來啦，馬上更新嘗鮮吧！ 不用擔心，更新很快的哦！',
-		desc: '提示：更新會還原默認配寘',
-		btnOne: '殘忍拒絕',
-		btnTwo: '馬上更新',
-		btnTwoLoading: '更新中',
-	},
+
 };

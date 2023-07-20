@@ -1,4 +1,5 @@
 import { createRouter, createWebHashHistory } from 'vue-router';
+// NProgress是页面跳转是出现在浏览器顶部的进度条
 import NProgress from 'nprogress';
 import 'nprogress/nprogress.css';
 import pinia from '/@/stores/index';
@@ -90,13 +91,15 @@ export function formatTwoStageRoutes(arr: any) {
 	return newArr;
 }
 
-// 路由加载前
+// 路由加载前 导航守卫
 router.beforeEach(async (to, from, next) => {
+	// 表示在加载进度条时不显示加载小图标，false隐藏，true显示
 	NProgress.configure({ showSpinner: false });
 	if (to.meta.title) NProgress.start();
 	const token = Session.get('token');
 	if (to.path === '/login' && !token) {
 		next();
+		//start进度条开始， done进度条加载结束
 		NProgress.done();
 	} else {
 		if (!token) {
@@ -108,6 +111,7 @@ router.beforeEach(async (to, from, next) => {
 			NProgress.done();
 		} else {
 			const storesRoutesList = useRoutesList(pinia);
+			console.log(1,pinia);
 			const { routesList } = storeToRefs(storesRoutesList);
 			if (routesList.value.length === 0) {
 				if (isRequestRoutes) {

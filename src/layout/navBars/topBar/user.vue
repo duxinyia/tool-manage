@@ -64,7 +64,7 @@
 		</div>
 		<el-dropdown :show-timeout="70" :hide-timeout="50" @command="onHandleCommandClick">
 			<span class="layout-navbars-breadcrumb-user-link">
-				<img :src="userInfos.photo" class="layout-navbars-breadcrumb-user-link-photo mr5" />
+				<!-- <img :src="userInfos.photo" class="layout-navbars-breadcrumb-user-link-photo mr5" /> -->
 				{{ userInfos.userName === '' ? 'common' : userInfos.userName }}
 				<el-icon class="el-icon--right">
 					<ele-ArrowDown />
@@ -182,7 +182,7 @@ const onHandleCommandClick = (path: string) => {
 			})
 			.catch(() => {});
 	} else if (path === 'wareHouse') {
-		window.open('https://gitee.com/lyt-top/vue-next-admin');
+		// window.open('https://gitee.com/lyt-top/vue-next-admin');
 	} else {
 		router.push(path);
 	}

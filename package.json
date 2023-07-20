@@ -1,5 +1,5 @@
 {
-	"name": "vue-next-admin",
+	"name": "tool-manage",
 	"version": "2.4.33",
 	"description": "vue3 vite next admin template",
 	"author": "lyt_20201208",
@@ -76,7 +76,7 @@
 		"vuejs/vue-next",
 		"element-ui",
 		"element-plus",
-		"vue-next-admin",
+		"tool-manage",
 		"next-admin"
 	],
 	"repository": {

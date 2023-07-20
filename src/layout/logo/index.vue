@@ -1,7 +1,7 @@
 <template>
 	<div class="layout-logo" v-if="setShowLogo" @click="onThemeConfigChange">
 		<img :src="logoMini" class="layout-logo-medium-img" />
-		<span>{{ themeConfig.globalTitle }}</span>
+		<!-- <span>{{ themeConfig.globalTitle }}</span> -->
 	</div>
 	<div class="layout-logo-size" v-else @click="onThemeConfigChange">
 		<img :src="logoMini" class="layout-logo-size-img" />
@@ -12,7 +12,7 @@
 import { computed } from 'vue';
 import { storeToRefs } from 'pinia';
 import { useThemeConfig } from '/@/stores/themeConfig';
-import logoMini from '/@/assets/logo-mini.svg';
+import logoMini from '/@/assets/new_logo.png';
 
 // 定义变量内容
 const storesThemeConfig = useThemeConfig();
@@ -32,6 +32,7 @@ const onThemeConfigChange = () => {
 
 <style scoped lang="scss">
 .layout-logo {
+	margin-top: 24px;
 	width: 220px;
 	height: 50px;
 	display: flex;
@@ -52,7 +53,7 @@ const onThemeConfigChange = () => {
 		}
 	}
 	&-medium-img {
-		width: 20px;
+		width: 163px;
 		margin-right: 5px;
 	}
 }
@@ -63,7 +64,7 @@ const onThemeConfigChange = () => {
 	cursor: pointer;
 	animation: logoAnimation 0.3s ease-in-out;
 	&-img {
-		width: 20px;
+		width: 163px;
 		margin: auto;
 	}
 	&:hover {

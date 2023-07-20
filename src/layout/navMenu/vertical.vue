@@ -1,4 +1,7 @@
 <template>
+	<!-- <div class="login-top-logo">
+		<img :src="logoMini" />
+	</div> -->
 	<el-menu
 		router
 		:default-active="state.defaultActive"
@@ -36,6 +39,7 @@ import { useRoute, onBeforeRouteUpdate, RouteRecordRaw } from 'vue-router';
 import { storeToRefs } from 'pinia';
 import { useThemeConfig } from '/@/stores/themeConfig';
 import other from '/@/utils/other';
+import logoMini from '/@/assets/new_logo.png';
 
 // 引入组件
 const SubItem = defineAsyncComponent(() => import('/@/layout/navMenu/subItem.vue'));
@@ -100,3 +104,11 @@ watch(
 	}
 );
 </script>
+<style scoped lang="scss">
+.login-top-logo {
+	img {
+		width: 185px;
+		height: 53px;
+	}
+}
+</style>

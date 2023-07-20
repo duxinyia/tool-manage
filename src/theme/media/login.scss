@@ -3,34 +3,35 @@
 /* 页面宽度小于1200px
 ------------------------------- */
 @media screen and (max-width: $lg) and (min-width: $xs) {
-	.login-container {
-		.login-left {
-			.login-left-img {
-				top: 90% !important;
-				left: 12% !important;
-				width: 30% !important;
-				height: 18% !important;
-			}
+	.main-login{
+		background-color: #2c9ff5;
+		.login-container {
+			display: none;
 		}
-		.login-right {
-			position: absolute;
-			top: 50%;
-			left: 50%;
-			transform: translate(-50%, -50%);
+		.login-bottom {
+			left: 50%!important;
 		}
 	}
+
 }
 
 /* 页面宽度小于576px
 ------------------------------- */
 @media screen and (max-width: $xs) {
-	.login-container {
-		.login-left {
+	.main-login{
+		background-color: #fff;
+		.login-top{
 			display: none;
 		}
-		.login-right {
+		.login-container {
+			display: none;
+		}
+		.login-bottom {
+			left: 50%!important;
+			top: 25%!important;
 			width: 100% !important;
 			.login-right-warp {
+				height: 100%;
 				width: 100% !important;
 				height: 100% !important;
 				border: none !important;
@@ -39,7 +40,7 @@
 						display: flex !important;
 					}
 					.login-right-warp-main-title {
-						font-size: 20px !important;
+						font-size: 25px !important;
 					}
 				}
 				.login-right-warp-one {
@@ -54,6 +55,7 @@
 				}
 			}
 		}
+		
 	}
 }
 
@@ -61,7 +63,7 @@
 ------------------------------- */
 @media screen and (max-width: $us) {
 	.login-container {
-		.login-right {
+		.login-bottom {
 			.login-right-warp {
 				.login-right-warp-mian {
 					.login-right-warp-main-title {

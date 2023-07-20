@@ -1,122 +1,135 @@
 <template>
-	<div class="system-menu-container layout-pd">
-		<el-card shadow="hover">
-			<div class="system-menu-search mb15">
-				<el-input size="default" placeholder="请输入菜单名称" style="max-width: 180px"> </el-input>
-				<el-button size="default" type="primary" class="ml10">
-					<el-icon>
-						<ele-Search />
-					</el-icon>
-					查询
-				</el-button>
-				<el-button size="default" type="success" class="ml10" @click="onOpenAddMenu">
-					<el-icon>
-						<ele-FolderAdd />
-					</el-icon>
-					新增菜单
-				</el-button>
-			</div>
-			<el-table
-				:data="state.tableData.data"
-				v-loading="state.tableData.loading"
-				style="width: 100%"
-				row-key="path"
-				:tree-props="{ children: 'children', hasChildren: 'hasChildren' }"
-			>
-				<el-table-column label="菜单名称" show-overflow-tooltip>
-					<template #default="scope">
-						<SvgIcon :name="scope.row.meta.icon" />
-						<span class="ml10">{{ $t(scope.row.meta.title) }}</span>
-					</template>
-				</el-table-column>
-				<el-table-column prop="path" label="路由路径" show-overflow-tooltip></el-table-column>
-				<el-table-column label="组件路径" show-overflow-tooltip>
-					<template #default="scope">
-						<span>{{ scope.row.component }}</span>
-					</template>
-				</el-table-column>
-				<el-table-column label="权限标识" show-overflow-tooltip>
-					<template #default="scope">
-						<span>{{ scope.row.meta.roles }}</span>
-					</template>
-				</el-table-column>
-				<el-table-column label="排序" show-overflow-tooltip width="80">
-					<template #default="scope">
-						{{ scope.$index }}
-					</template>
-				</el-table-column>
-				<el-table-column label="类型" show-overflow-tooltip width="80">
-					<template #default="scope">
-						<el-tag type="success" size="small">{{ scope.row.xx }}菜单</el-tag>
-					</template>
-				</el-table-column>
-				<el-table-column label="操作" show-overflow-tooltip width="140">
-					<template #default="scope">
-						<el-button size="small" text type="primary" @click="onOpenAddMenu('add')">新增</el-button>
-						<el-button size="small" text type="primary" @click="onOpenEditMenu('edit', scope.row)">修改</el-button>
-						<el-button size="small" text type="primary" @click="onTabelRowDel(scope.row)">删除</el-button>
-					</template>
-				</el-table-column>
-			</el-table>
-		</el-card>
-		<MenuDialog ref="menuDialogRef" @refresh="getTableData()" />
+	<div class="table-demo-container layout-padding">
+		<div class="table-demo-padding layout-padding-view layout-padding-auto">
+			<TableSearch :search="state.tableData.search" @search="onSearch" />
+			<Table
+				ref="tableRef"
+				v-bind="state.tableData"
+				class="table-demo"
+				@delRow="onTableDelRow"
+				@pageChange="onTablePageChange"
+				@sortHeader="onSortHeader"
+			/>
+		</div>
 	</div>
 </template>
 
-<script setup lang="ts" name="systemMenu">
-import { defineAsyncComponent, ref, onMounted, reactive } from 'vue';
-import { RouteRecordRaw } from 'vue-router';
-import { ElMessageBox, ElMessage } from 'element-plus';
-import { storeToRefs } from 'pinia';
-import { useRoutesList } from '/@/stores/routesList';
-// import { setBackEndControlRefreshRoutes } from "/@/router/backEnd";
+<script setup lang="ts" name="makeTableDemo">
+import { defineAsyncComponent, reactive, ref, onMounted } from 'vue';
+import { ElMessage } from 'element-plus';
 
 // 引入组件
-const MenuDialog = defineAsyncComponent(() => import('/@/views/system/menu/dialog.vue'));
-
+const Table = defineAsyncComponent(() => import('/@/components/table/index.vue'));
+const TableSearch = defineAsyncComponent(() => import('./search.vue'));
 // 定义变量内容
-const stores = useRoutesList();
-const { routesList } = storeToRefs(stores);
-const menuDialogRef = ref();
-const state = reactive({
+const tableRef = ref<RefType>();
+const state = reactive<TableDemoState>({
 	tableData: {
-		data: [] as RouteRecordRaw[],
-		loading: true,
+		// 列表数据（必传）
+		data: [],
+		// 表头内容（必传，注意格式）
+		header: [
+			{ key: 'name', colWidth: '', title: '应检尽检核酸采样点名称', type: 'text', isCheck: true },
+			{ key: 'address', colWidth: '', title: '详细地址', type: 'text', isCheck: true },
+			{ key: 'phone', colWidth: '', title: '采样点联系电话', type: 'text', isCheck: true },
+			{ key: 'time', colWidth: '', title: '开放时间', type: 'text', isCheck: true },
+			{ key: 'isSupport', colWidth: '', title: '是否支持24小时核酸检测', type: 'text', isCheck: true },
+			{ key: 'image', colWidth: '', width: '70', height: '40', title: '图片描述', type: 'image', isCheck: true },
+		],
+		// 配置项（必传）
+		config: {
+			total: 0, // 列表总数
+			loading: true, // loading 加载
+			isBorder: false, // 是否显示表格边框
+			isSerialNo: true, // 是否显示表格序号
+			isSelection: true, // 是否显示表格多选
+			isOperate: true, // 是否显示表格操作栏
+		},
+		// 搜索表单，动态生成（传空数组时，将不显示搜索，注意格式）
+		search: [
+			{ label: '采样点名称', prop: 'name', placeholder: '请输入应检尽检核酸采样点名称', required: true, type: 'input' },
+			{ label: '详细地址', prop: 'address', placeholder: '请输入详细地址', required: false, type: 'input' },
+			{ label: '联系电话', prop: 'phone', placeholder: '请输入采样点联系电话', required: false, type: 'input' },
+			{ label: '开放时间', prop: 'time', placeholder: '请选择', required: false, type: 'date' },
+			{
+				label: '支持24小时',
+				prop: 'isSupport',
+				placeholder: '请选择',
+				required: false,
+				type: 'select',
+				options: [
+					{ label: '是', value: 1 },
+					{ label: '否', value: 0 },
+				],
+			},
+			{ label: '图片描述', prop: 'image', placeholder: '请输入图片描述', required: false, type: 'input' },
+			{ label: '核酸机构', prop: 'mechanism', placeholder: '请输入核酸机构', required: false, type: 'input' },
+		],
+		// 搜索参数（不用传，用于分页、搜索时传给后台的值，`getTableData` 中使用）
+		param: {
+			pageNum: 1,
+			pageSize: 10,
+		},
+		// 打印标题
+		printName: 'vueNextAdmin 表格打印演示',
 	},
 });
 
-// 获取路由数据，真实请从接口获取
+// 初始化列表数据
 const getTableData = () => {
-	state.tableData.loading = true;
-	state.tableData.data = routesList.value;
+	state.tableData.config.loading = true;
+	state.tableData.data = [];
+	for (let i = 0; i < 20; i++) {
+		state.tableData.data.push({
+			id: `123456789${i + 1}`,
+			name: `莲塘别墅广场${i + 1}`,
+			address: `中沧公寓中庭榕树下${i + 1}`,
+			phone: `0592-6081259${i + 1}`,
+			time: `6:00 ~ 24:00`,
+			isSupport: `${i % 2 === 0 ? '是' : '否'}`,
+			image: `https://img2.baidu.com/it/u=417454395,2713356475&fm=253&fmt=auto?w=200&h=200`,
+		});
+	}
+	// 数据总数（模拟，真实从接口取）
+	state.tableData.config.total = state.tableData.data.length;
 	setTimeout(() => {
-		state.tableData.loading = false;
+		state.tableData.config.loading = false;
 	}, 500);
 };
-// 打开新增菜单弹窗
-const onOpenAddMenu = (type: string) => {
-	menuDialogRef.value.openDialog(type);
+// 搜索点击时表单回调
+const onSearch = (data: EmptyObjectType) => {
+	state.tableData.param = Object.assign({}, state.tableData.param, { ...data });
+	tableRef.value.pageReset();
 };
-// 打开编辑菜单弹窗
-const onOpenEditMenu = (type: string, row: RouteRecordRaw) => {
-	menuDialogRef.value.openDialog(type, row);
+// 删除当前项回调
+const onTableDelRow = (row: EmptyObjectType) => {
+	ElMessage.success(`删除${row.name}成功！`);
+	getTableData();
 };
-// 删除当前行
-const onTabelRowDel = (row: RouteRecordRaw) => {
-	ElMessageBox.confirm(`此操作将永久删除路由：${row.path}, 是否继续?`, '提示', {
-		confirmButtonText: '删除',
-		cancelButtonText: '取消',
-		type: 'warning',
-	})
-		.then(() => {
-			ElMessage.success('删除成功');
-			getTableData();
-			//await setBackEndControlRefreshRoutes() // 刷新菜单，未进行后端接口测试
-		})
-		.catch(() => {});
+// 分页改变时回调
+const onTablePageChange = (page: TableDemoPageType) => {
+	state.tableData.param.pageNum = page.pageNum;
+	state.tableData.param.pageSize = page.pageSize;
+	getTableData();
+};
+// 拖动显示列排序回调
+const onSortHeader = (data: TableHeaderType[]) => {
+	state.tableData.header = data;
 };
 // 页面加载时
 onMounted(() => {
 	getTableData();
 });
 </script>
+
+<style scoped lang="scss">
+.table-demo-container {
+	.table-demo-padding {
+		padding: 15px;
+		.table-demo {
+			flex: 1;
+			overflow: hidden;
+		}
+	}
+}
+</style>

@@ -4,6 +4,9 @@
 
 // 用户信息
 declare interface UserInfos<T = any> {
+	// name: string;
+	// paw:string;
+	// SystemName:string
 	authBtnList: string[];
 	photo: string;
 	roles: string[];

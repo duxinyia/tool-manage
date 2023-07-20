@@ -8,7 +8,9 @@ const getAlicdnIconfont = () => {
 			const styles: any = document.styleSheets;
 			let sheetsList = [];
 			let sheetsIconList = [];
+			
 			for (let i = 0; i < styles.length; i++) {
+
 				if (styles[i].href && styles[i].href.indexOf('at.alicdn.com') > -1) {
 					sheetsList.push(styles[i]);
 				}
@@ -24,6 +26,8 @@ const getAlicdnIconfont = () => {
 			}
 			if (sheetsIconList.length > 0) resolve(sheetsIconList);
 			else reject('未获取到值，请刷新重试');
+			console.log(sheetsIconList);
+
 		});
 	});
 };

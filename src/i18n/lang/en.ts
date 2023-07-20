@@ -2,7 +2,7 @@
 export default {
 	router: {
 		home: 'home',
-		system: 'system',
+		system: 'basic data maintenance',
 		systemMenu: 'systemMenu',
 		systemRole: 'systemRole',
 		systemUser: 'systemUser',
@@ -181,12 +181,5 @@ export default {
 		copyTextSuccess: 'Copy succeeded!',
 		copyTextError: 'Copy failed!',
 	},
-	upgrade: {
-		title: 'New version',
-		msg: 'The new version is available, please update it now! Dont worry, the update is fast!',
-		desc: 'Prompt: Update will restore the default configuration',
-		btnOne: 'Cruel refusal',
-		btnTwo: 'Update now',
-		btnTwoLoading: 'Updating',
-	},
+
 };
