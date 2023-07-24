@@ -48,7 +48,7 @@
 
 
 # 进入项目
-cd toll-manage
+cd tool-manage
 
 # 安装依赖
 cnpm install

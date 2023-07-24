@@ -32,7 +32,7 @@ const onThemeConfigChange = () => {
 
 <style scoped lang="scss">
 .layout-logo {
-	margin-top: 24px;
+	margin: 15px 0;
 	width: 220px;
 	height: 50px;
 	display: flex;

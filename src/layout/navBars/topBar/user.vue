@@ -1,6 +1,6 @@
 <template>
 	<div class="layout-navbars-breadcrumb-user pr15" :style="{ flex: layoutUserFlexNum }">
-		<el-dropdown :show-timeout="70" :hide-timeout="50" trigger="click" @command="onComponentSizeChange">
+		<!-- <el-dropdown :show-timeout="70" :hide-timeout="50" trigger="click" @command="onComponentSizeChange">
 			<div class="layout-navbars-breadcrumb-user-icon">
 				<i class="iconfont icon-ziti" :title="$t('message.user.title0')"></i>
 			</div>
@@ -11,14 +11,10 @@
 					<el-dropdown-item command="small" :disabled="state.disabledSize === 'small'">{{ $t('message.user.dropdownSmall') }}</el-dropdown-item>
 				</el-dropdown-menu>
 			</template>
-		</el-dropdown>
+		</el-dropdown> -->
 		<el-dropdown :show-timeout="70" :hide-timeout="50" trigger="click" @command="onLanguageChange">
 			<div class="layout-navbars-breadcrumb-user-icon">
-				<i
-					class="iconfont"
-					:class="state.disabledI18n === 'en' ? 'icon-fuhao-yingwen' : 'icon-fuhao-zhongwen'"
-					:title="$t('message.user.title1')"
-				></i>
+				<i class="iconfont" :class="state.disabledI18n === 'en' ? 'icon-fuhao-yingwen' : 'icon-zhongwen'" :title="$t('message.user.title1')"></i>
 			</div>
 			<template #dropdown>
 				<el-dropdown-menu>
@@ -28,53 +24,41 @@
 				</el-dropdown-menu>
 			</template>
 		</el-dropdown>
-		<div class="layout-navbars-breadcrumb-user-icon" @click="onSearchClick">
-			<el-icon :title="$t('message.user.title2')">
-				<ele-Search />
-			</el-icon>
-		</div>
+		<!-- <div class="layout-navbars-breadcrumb-user-icon" @click="onSearchClick">
+			<i class="iconfont icon-chaxun" :title="$t('message.user.title2')"></i>
+		</div> -->
 		<div class="layout-navbars-breadcrumb-user-icon" @click="onLayoutSetingClick">
-			<i class="icon-skin iconfont" :title="$t('message.user.title3')"></i>
+			<i class="icon-huanfu iconfont" :title="$t('message.user.title3')"></i>
 		</div>
-		<div class="layout-navbars-breadcrumb-user-icon" ref="userNewsBadgeRef" v-click-outside="onUserNewsClick">
+		<!-- <div class="layout-navbars-breadcrumb-user-icon" ref="userNewsBadgeRef" v-click-outside="onUserNewsClick">
 			<el-badge :is-dot="true">
 				<el-icon :title="$t('message.user.title4')">
 					<ele-Bell />
 				</el-icon>
 			</el-badge>
-		</div>
-		<el-popover
-			ref="userNewsRef"
-			:virtual-ref="userNewsBadgeRef"
-			placement="bottom"
-			trigger="click"
-			transition="el-zoom-in-top"
-			virtual-triggering
-			:width="300"
-			:persistent="false"
-		>
-			<UserNews />
-		</el-popover>
-		<div class="layout-navbars-breadcrumb-user-icon mr10" @click="onScreenfullClick">
+		</div> -->
+
+		<div class="layout-navbars-breadcrumb-user-icon" @click="onScreenfullClick">
 			<i
 				class="iconfont"
 				:title="state.isScreenfull ? $t('message.user.title6') : $t('message.user.title5')"
-				:class="!state.isScreenfull ? 'icon-fullscreen' : 'icon-tuichuquanping'"
+				:class="!state.isScreenfull ? 'icon-quanping' : 'icon-tuichuquanping'"
 			></i>
 		</div>
+		<div class="layout-navbars-breadcrumb-user-icon mr10">{{ currentTime }}</div>
 		<el-dropdown :show-timeout="70" :hide-timeout="50" @command="onHandleCommandClick">
 			<span class="layout-navbars-breadcrumb-user-link">
 				<!-- <img :src="userInfos.photo" class="layout-navbars-breadcrumb-user-link-photo mr5" /> -->
-				{{ userInfos.userName === '' ? 'common' : userInfos.userName }}
-				<el-icon class="el-icon--right">
-					<ele-ArrowDown />
-				</el-icon>
+
+				{{ userInfos.userName === '' ? 'G1656790杜欣怡' : 'G1656790杜欣怡' }}
+				<i class="iconfont icon-user-s userH"></i>
+				<!-- <el-icon class="el-icon--right">
+					<i class="iconfont icon-user-s userH"></i>
+				</el-icon> -->
 			</span>
 			<template #dropdown>
 				<el-dropdown-menu>
-					<el-dropdown-item command="/home">{{ $t('message.user.dropdown1') }}</el-dropdown-item>
-					<el-dropdown-item command="wareHouse">{{ $t('message.user.dropdown6') }}</el-dropdown-item>
-					<el-dropdown-item command="/personal">{{ $t('message.user.dropdown2') }}</el-dropdown-item>
+					<el-dropdown-item command="/system/menu">{{ $t('message.user.dropdown1') }}</el-dropdown-item>
 					<el-dropdown-item command="/404">{{ $t('message.user.dropdown3') }}</el-dropdown-item>
 					<el-dropdown-item command="/401">{{ $t('message.user.dropdown4') }}</el-dropdown-item>
 					<el-dropdown-item divided command="logOut">{{ $t('message.user.dropdown5') }}</el-dropdown-item>
@@ -86,7 +70,7 @@
 </template>
 
 <script setup lang="ts" name="layoutBreadcrumbUser">
-import { defineAsyncComponent, ref, unref, computed, reactive, onMounted } from 'vue';
+import { defineAsyncComponent, ref, unref, computed, reactive, onMounted, onUnmounted, onBeforeUnmount } from 'vue';
 import { useRouter } from 'vue-router';
 import { ElMessageBox, ElMessage, ClickOutside as vClickOutside } from 'element-plus';
 import screenfull from 'screenfull';
@@ -97,6 +81,7 @@ import { useThemeConfig } from '/@/stores/themeConfig';
 import other from '/@/utils/other';
 import mittBus from '/@/utils/mitt';
 import { Session, Local } from '/@/utils/storage';
+import moment from 'moment';
 
 // 引入组件
 const UserNews = defineAsyncComponent(() => import('/@/layout/navBars/topBar/userNews.vue'));
@@ -105,6 +90,8 @@ const Search = defineAsyncComponent(() => import('/@/layout/navBars/topBar/searc
 // 定义变量内容
 const userNewsRef = ref();
 const userNewsBadgeRef = ref();
+const currentTime = ref();
+const times = ref();
 const { locale, t } = useI18n();
 const router = useRouter();
 const stores = useUserInfo();
@@ -127,6 +114,13 @@ const layoutUserFlexNum = computed(() => {
 	else num = '';
 	return num;
 });
+// 获取当前时间
+const getCurrentTime = () => {
+	currentTime.value = moment().format('YYYY/MM/DD HH:mm:ss');
+	times.value = setInterval(() => {
+		currentTime.value = moment().format('YYYY/MM/DD HH:mm:ss');
+	}, 1000);
+};
 // 全屏点击时
 const onScreenfullClick = () => {
 	if (!screenfull.isEnabled) {
@@ -214,10 +208,14 @@ const initI18nOrSize = (value: string, attr: string) => {
 };
 // 页面加载时
 onMounted(() => {
+	getCurrentTime();
 	if (Local.get('themeConfig')) {
 		initI18nOrSize('globalComponentSize', 'disabledSize');
 		initI18nOrSize('globalI18n', 'disabledI18n');
 	}
+});
+onBeforeUnmount(() => {
+	clearInterval(times.value);
 });
 </script>
 
@@ -264,6 +262,9 @@ onMounted(() => {
 	}
 	:deep(.el-badge__content.is-fixed) {
 		top: 12px;
+	}
+	.userH {
+		font-size: 24px !important;
 	}
 }
 </style>

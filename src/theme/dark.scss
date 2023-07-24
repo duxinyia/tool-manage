@@ -95,6 +95,9 @@
 	.el-tabs--border-card > .el-tabs__header .el-tabs__item.is-active {
 		background: var(--next-color-primary-lighter);
 	}
+	.el-table tr{
+		background: var(--next-color-primary)!important;
+	}
 
 	// alert / notice-bar
 	.home-card-item {

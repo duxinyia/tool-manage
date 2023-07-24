@@ -11,6 +11,9 @@
 		.login-bottom {
 			left: 50%!important;
 		}
+		.login-content-submit{
+			margin-top: 17px!important;
+		}
 	}
 
 }
@@ -19,7 +22,7 @@
 ------------------------------- */
 @media screen and (max-width: $xs) {
 	.main-login{
-		background-color: #fff;
+		background-color: var(--next-color-white)	;
 		.login-top{
 			display: none;
 		}

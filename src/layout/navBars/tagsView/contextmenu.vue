@@ -55,9 +55,9 @@ const state = reactive({
 		{ contextMenuClickId: 0, txt: 'message.tagsView.refresh', affix: false, icon: 'ele-RefreshRight' },
 		{ contextMenuClickId: 1, txt: 'message.tagsView.close', affix: false, icon: 'ele-Close' },
 		{ contextMenuClickId: 2, txt: 'message.tagsView.closeOther', affix: false, icon: 'ele-CircleClose' },
-		{ contextMenuClickId: 3, txt: 'message.tagsView.closeAll', affix: false, icon: 'ele-FolderDelete' },
+		// { contextMenuClickId: 3, txt: 'message.tagsView.closeAll', affix: false, icon: 'ele-FolderDelete' },
 		{
-			contextMenuClickId: 4,
+			contextMenuClickId: 3,
 			txt: 'message.tagsView.fullscreen',
 			affix: false,
 			icon: 'iconfont icon-fullscreen',

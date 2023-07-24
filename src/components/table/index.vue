@@ -1,71 +1,20 @@
 <template>
 	<div class="table-container">
-		<el-table
-			:data="data"
-			:border="setBorder"
-			v-bind="$attrs"
-			row-key="id"
-			stripe
-			style="width: 100%"
-			v-loading="config.loading"
-			@selection-change="onSelectionChange"
-		>
-			<el-table-column type="selection" :reserve-selection="true" width="30" v-if="config.isSelection" />
-			<el-table-column type="index" label="序号" width="60" v-if="config.isSerialNo" />
-			<el-table-column
-				v-for="(item, index) in setHeader"
-				:key="index"
-				show-overflow-tooltip
-				:prop="item.key"
-				:width="item.colWidth"
-				:label="item.title"
-			>
-				<template v-slot="scope">
-					<template v-if="item.type === 'image'">
-						<el-image
-							:style="{ width: `${item.width}px`, height: `${item.height}px` }"
-							:src="scope.row[item.key]"
-							:zoom-rate="1.2"
-							:preview-src-list="[scope.row[item.key]]"
-							preview-teleported
-							fit="cover"
-						/>
-					</template>
-					<template v-else>
-						{{ scope.row[item.key] }}
-					</template>
-				</template>
-			</el-table-column>
-			<el-table-column label="操作" width="100" v-if="config.isOperate">
-				<template v-slot="scope">
-					<el-popconfirm title="确定删除吗？" @confirm="onDelRow(scope.row)">
-						<template #reference>
-							<el-button text type="primary">删除</el-button>
-						</template>
-					</el-popconfirm>
-				</template>
-			</el-table-column>
-			<template #empty>
-				<el-empty description="暂无数据" />
-			</template>
-		</el-table>
-		<div class="table-footer mt15">
-			<el-pagination
-				v-model:current-page="state.page.pageNum"
-				v-model:page-size="state.page.pageSize"
-				:pager-count="5"
-				:page-sizes="[10, 20, 30]"
-				:total="config.total"
-				layout="total, sizes, prev, pager, next, jumper"
-				background
-				@size-change="onHandleSizeChange"
-				@current-change="onHandleCurrentChange"
-			>
-			</el-pagination>
+		<div class="table-footer">
+			<div class="allBtn">
+				<el-button size="default" class="ml10 buttonBorder" @click="onOpenAddRole('add')" color="#1890FF " plain
+					><el-icon><ele-Plus /></el-icon> 新增</el-button
+				>
+
+				<el-button size="default" class="ml10 buttonBorder" @click="onOpenAddRole('del')" color="#D33939" plain>
+					<el-icon><ele-Delete /></el-icon>
+					批量删除
+				</el-button>
+			</div>
 			<div class="table-footer-tool">
-				<SvgIcon name="iconfont icon-dayin" :size="19" title="打印" @click="onPrintTable" />
-				<SvgIcon name="iconfont icon-yunxiazai_o" :size="22" title="导出" @click="onImportTable" />
-				<SvgIcon name="iconfont icon-shuaxin" :size="22" title="刷新" @click="onRefreshTable" />
+				<SvgIcon name="iconfont icon-dayinji" :size="19" title="打印" @click="onPrintTable" />
+				<SvgIcon name="iconfont icon-btn-daochu" :size="22" title="导出" @click="onImportTable" />
+				<SvgIcon name="iconfont icon-refresh-line" :size="23" title="刷新" @click="onRefreshTable" />
 				<el-popover
 					placement="top-end"
 					trigger="click"
@@ -76,7 +25,7 @@
 					@show="onSetTable"
 				>
 					<template #reference>
-						<SvgIcon name="iconfont icon-quanjushezhi_o" :size="22" title="设置" />
+						<SvgIcon name="iconfont icon-shezhi" :size="20" title="设置" />
 					</template>
 					<template #default>
 						<div class="tool-box">
@@ -104,6 +53,79 @@
 					</template>
 				</el-popover>
 			</div>
+		</div>
+		<el-table
+			class="mt12"
+			:data="data"
+			:border="setBorder"
+			v-bind="$attrs"
+			row-key="id"
+			stripe
+			style="width: 100%"
+			:row-style="{ height: '10px' }"
+			:header-row-style="{ background: '#f2f5fa' }"
+			v-loading="config.loading"
+			@selection-change="onSelectionChange"
+		>
+			<el-table-column type="selection" :reserve-selection="true" width="30" v-if="config.isSelection" />
+			<el-table-column align="center" type="index" label="序号" width="60" v-if="config.isSerialNo" />
+			<el-table-column
+				align="center"
+				v-for="(item, index) in setHeader"
+				:key="index"
+				show-overflow-tooltip
+				:prop="item.key"
+				:width="item.colWidth"
+				:label="item.title"
+			>
+				<template v-slot="scope">
+					<template v-if="item.type === 'image'">
+						<el-image
+							:style="{ width: `${item.width}px`, height: `${item.height}px` }"
+							:src="scope.row[item.key]"
+							:zoom-rate="1.2"
+							:preview-src-list="[scope.row[item.key]]"
+							preview-teleported
+							fit="cover"
+						/>
+					</template>
+					<template v-else>
+						{{ scope.row[item.key] }}
+					</template>
+				</template>
+			</el-table-column>
+			<el-table-column align="center" label="操作" width="250" v-if="config.isOperate">
+				<template v-slot="scope">
+					<el-button color="#39D339" plain class="button buttonBorder"
+						><el-icon><ele-Edit /></el-icon>修改</el-button
+					>
+					<el-popconfirm title="确定删除吗？" @confirm="onDelRow(scope.row)">
+						<template #reference>
+							<el-button class="button buttonBorder" color="#D33939" plain
+								><el-icon><ele-Delete /></el-icon>删除</el-button
+							>
+						</template>
+					</el-popconfirm>
+				</template>
+			</el-table-column>
+			<template #empty>
+				<el-empty description="暂无数据" />
+			</template>
+		</el-table>
+		<div class="footer">
+			<el-pagination
+				class="mt15 pages"
+				v-model:current-page="state.page.pageNum"
+				v-model:page-size="state.page.pageSize"
+				:pager-count="5"
+				:page-sizes="[10, 20, 30]"
+				:total="config.total"
+				layout="total, sizes, prev, pager, next, jumper"
+				background
+				@size-change="onHandleSizeChange"
+				@current-change="onHandleCurrentChange"
+			>
+			</el-pagination>
 		</div>
 	</div>
 </template>
@@ -144,7 +166,8 @@ const props = defineProps({
 
 // 定义子组件向父组件传值/事件
 const emit = defineEmits(['delRow', 'pageChange', 'sortHeader']);
-
+// 打开新增角色弹窗
+const onOpenAddRole = (type: string) => {};
 // 定义变量内容
 const toolSetRef = ref();
 const storesThemeConfig = useThemeConfig();
@@ -296,6 +319,28 @@ defineExpose({
 				}
 			}
 		}
+	}
+	.button {
+		width: 80px;
+		height: 32px;
+	}
+	.buttonBorder {
+		border: 0px !important;
+	}
+	:deep(.el-table__cell) {
+		padding: 8px 0px !important;
+	}
+	.footer {
+		display: flex;
+	}
+	.pages {
+		flex: 1;
+		display: flex;
+		align-items: center;
+		justify-content: flex-end;
+	}
+	:deep(.el-table th.el-table__cell) {
+		background-color: unset;
 	}
 }
 </style>

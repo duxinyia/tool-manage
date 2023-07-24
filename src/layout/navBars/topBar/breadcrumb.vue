@@ -3,7 +3,7 @@
 		<SvgIcon
 			class="layout-navbars-breadcrumb-icon"
 			:name="themeConfig.isCollapse ? 'ele-Expand' : 'ele-Fold'"
-			:size="16"
+			:size="20"
 			@click="onThemeConfigChange"
 		/>
 		<el-breadcrumb class="layout-navbars-breadcrumb-hide">
@@ -78,6 +78,9 @@ const getBreadcrumbList = (arr: RouteItems) => {
 				state.breadcrumbList.push(item);
 				state.routeSplitIndex++;
 				if (item.children) getBreadcrumbList(item.children);
+			} else if (item.path == '/system') {
+				state.breadcrumbList.shift();
+				state.breadcrumbList.unshift({ path: '/', meta: { title: 'message.router.mainHead' } });
 			}
 		});
 	});
@@ -91,7 +94,7 @@ const initRouteSplit = (path: string) => {
 	state.routeSplitFirst = `/${state.routeSplit[0]}`;
 	state.routeSplitIndex = 1;
 	getBreadcrumbList(routesList.value);
-	if (route.name === 'home' || (route.name === 'notFound' && state.breadcrumbList.length > 1)) state.breadcrumbList.shift();
+	if (route.name === 'system' || (route.name === 'notFound' && state.breadcrumbList.length > 1)) state.breadcrumbList.shift();
 	if (state.breadcrumbList.length > 0)
 		state.breadcrumbList[state.breadcrumbList.length - 1].meta.tagsViewName = other.setTagsViewNameI18n(<RouteToFrom>route);
 };

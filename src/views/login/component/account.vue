@@ -3,7 +3,7 @@
 		<el-form-item class="login-animation1">
 			<el-input text :placeholder="$t('message.account.accountPlaceholder1')" v-model="state.ruleForm.userName" clearable autocomplete="off">
 				<template #prefix>
-					<el-icon class="el-input__icon"><ele-User /></el-icon>
+					<el-icon class="el-input__icon" :size="20"><ele-User /></el-icon>
 				</template>
 			</el-input>
 		</el-form-item>
@@ -15,7 +15,7 @@
 				autocomplete="off"
 			>
 				<template #prefix>
-					<el-icon class="el-input__icon"><ele-Unlock /></el-icon>
+					<el-icon class="el-input__icon" :size="20"><ele-Unlock /></el-icon>
 				</template>
 				<template #suffix>
 					<i
@@ -28,7 +28,12 @@
 			</el-input>
 		</el-form-item>
 		<el-form-item class="login-animation3">
-			<el-col :span="15">
+			<!-- 记住密码和忘记密码 -->
+			<div class="pwd-container">
+				<el-checkbox> 记住密码 </el-checkbox>
+				<span class="forpwd">忘记密码</span>
+			</div>
+			<!-- <el-col :span="15">
 				<el-input
 					text
 					maxlength="4"
@@ -45,7 +50,7 @@
 			<el-col :span="1"></el-col>
 			<el-col :span="8">
 				<el-button class="login-content-code" v-waves>1234</el-button>
-			</el-col>
+			</el-col> -->
 		</el-form-item>
 		<el-form-item class="login-animation4">
 			<el-button type="primary" class="login-content-submit" round v-waves @click="onSignIn" :loading="state.loading.signIn">
@@ -153,6 +158,7 @@ const signInSuccess = (isNoPower: boolean | undefined) => {
 	.login-content-password {
 		display: inline-block;
 		width: 20px;
+		font-size: 20px;
 		cursor: pointer;
 		&:hover {
 			color: #909399;
@@ -167,8 +173,49 @@ const signInSuccess = (isNoPower: boolean | undefined) => {
 	.login-content-submit {
 		width: 100%;
 		letter-spacing: 2px;
-		font-weight: 300;
+		font-weight: 600;
 		margin-top: 15px;
+		height: 67px;
+		margin-top: 43px;
+		background: linear-gradient(170deg, #2d6dcd, #33a1ff, #33cbff);
+		box-shadow: 0px 3px 7px 0px rgba(16, 92, 138, 0.35);
+		border-radius: 34px;
+		border: 0px;
+		span {
+			font-size: 30px;
+		}
 	}
+	.pwd-container {
+		margin-top: -14px;
+		width: 100%;
+		padding: 0 20px;
+		.forpwd {
+			float: right;
+			cursor: pointer;
+			font-size: 14px;
+			&:hover {
+				color: #409eff;
+			}
+		}
+	}
+	.el-input--large {
+		font-size: 16px;
+	}
+	:deep(.el-input__wrapper) {
+		border-top: 0px;
+		border-right: 0px;
+		border-left: 0px;
+		border-bottom: 1px solid #ccc;
+		border-radius: 0px;
+		box-shadow: 0 0 0 0px;
+		height: 93px;
+	}
+	:deep(.el-input__inner) {
+		margin-left: 20px;
+	}
+	// 	.el-input--large .el-input__wrapper {
+	// 	font-size: 16px;
+	// 	padding: 30px 15px;
+	// }
 }
 </style>

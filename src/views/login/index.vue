@@ -18,6 +18,42 @@
 				</div>
 			</div>
 		</div>
+		<!-- 底部描述框 -->
+		<transition
+			appear
+			mode="out-in"
+			:duration="1000"
+			enter-active-class="animate__animated animate__backInUp"
+			leave-active-class="animate__animated animate__fadeOutRight"
+		>
+			<div class="copyright-info">
+				<div class="copyright">
+					<el-icon class="icon"><ele-CollectionTag /></el-icon>
+					Copyright © 2023. Foxconn All rights reserved
+					<!-- <a class="location" @click="toLocation">
+						{{ port == '8085' ? '正式地址' : '测试地址' }}
+					</a> -->
+				</div>
+				<div class="author-info">
+					<div>
+						<span class="author">
+							<el-icon class="icon"><ele-UserFilled /></el-icon>
+							杜欣怡/82585
+						</span>
+						<span class="mail">
+							<el-icon class="icon"><ele-Message /></el-icon>wwlh-mis-feweb@mail.foxconn.com
+						</span>
+						&nbsp;&nbsp;
+						<span class="author">
+							<el-icon class="icon"><ele-UserFilled /></el-icon>***/***-*****
+						</span>
+						<span class="mail">
+							<el-icon class="icon"><ele-Message /></el-icon>123@mail.foxconn.com
+						</span>
+					</div>
+				</div>
+			</div>
+		</transition>
 	</div>
 </template>
 
@@ -84,7 +120,7 @@ onMounted(() => {
 }
 .login-bottom {
 	position: absolute;
-	top: 43%;
+	top: 47%;
 	left: 73%;
 	transform: translate(-50%, -50%);
 	.login-bottom-img {
@@ -104,7 +140,7 @@ onMounted(() => {
 		// border: 1px solid var(--el-color-primary-light-3);
 		border-radius: 3px;
 		width: 500px;
-		height: 500px;
+		height: 550px;
 		position: relative;
 		overflow: hidden;
 		background-color: var(--el-color-white);
@@ -116,7 +152,7 @@ onMounted(() => {
 				color: #004595;
 				height: 130px;
 				line-height: 130px;
-				font-size: 40px;
+				font-size: 50px;
 				text-align: center;
 				letter-spacing: 3px;
 				animation: logoAnimation 0.3s ease;
@@ -164,6 +200,32 @@ onMounted(() => {
 					}
 				}
 			}
+		}
+	}
+}
+.copyright-info {
+	position: fixed;
+	width: 100%;
+	bottom: 2.6042vw;
+	font-size: 14px;
+	margin: auto;
+	text-align: center;
+	color: var(--next-color-white);
+	.copyright {
+		.location {
+			margin-left: 10px;
+			cursor: pointer;
+			color: yellow;
+		}
+	}
+	.icon {
+		margin-right: 4px;
+		vertical-align: middle;
+	}
+	.author-info {
+		margin-top: 2px;
+		.author {
+			margin-right: 10px;
 		}
 	}
 }

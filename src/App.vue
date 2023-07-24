@@ -6,7 +6,7 @@
 		<CloseFull v-if="!themeConfig.isLockScreen" />
 	</el-config-provider>
 </template>
-
+<!-- https://github.com/lyt-Top/vue-next-admin -->
 <script setup lang="ts" name="app">
 import { defineAsyncComponent, computed, ref, onBeforeMount, onMounted, onUnmounted, nextTick, watch } from 'vue';
 import { useRoute } from 'vue-router';

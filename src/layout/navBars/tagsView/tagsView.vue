@@ -1,5 +1,6 @@
 <template>
 	<div class="layout-navbars-tagsview" :class="{ 'layout-navbars-tagsview-shadow': getThemeConfig.layout === 'classic' }">
+		<!-- @wheel是鼠标滚轮滚动事件 -->
 		<el-scrollbar ref="scrollbarRef" @wheel.prevent="onHandleScroll">
 			<ul class="layout-navbars-tagsview-ul" :class="setTagsStyle" ref="tagsUlRef">
 				<li
@@ -294,22 +295,7 @@ const closeOtherTagsView = (path: string) => {
 		addBrowserSetSession(state.tagsViewList);
 	}
 };
-// 5、关闭全部 tagsView：如果是设置了固定的（isAffix），不进行关闭
-const closeAllTagsView = () => {
-	if (Session.get('tagsViewList')) {
-		storesKeepALiveNames.delAllCachedViews();
-		state.tagsViewList = [];
-		Session.get('tagsViewList').map((v: RouteItem) => {
-			if (v.meta?.isAffix && !v.meta.isHide) {
-				v.url = setTagsViewHighlight(v);
-				state.tagsViewList.push({ ...v });
-				router.push({ path: state.tagsViewList[state.tagsViewList.length - 1].path });
-			}
-		});
-		addBrowserSetSession(state.tagsViewList);
-	}
-};
-// 6、开启当前页面全屏
+// 5、开启当前页面全屏
 const openCurrenFullscreen = async (path: string) => {
 	const item = state.tagsViewList.find((v: RouteItem) => (getThemeConfig.value.isShareTagsView ? v.path === path : v.url === path));
 	if (item.meta.isDynamic) await router.push({ name: item.name, params: item.params });
@@ -357,10 +343,6 @@ const onCurrentContextmenuClick = async (item: RouteItem) => {
 			closeOtherTagsView(path);
 			break;
 		case 3:
-			// 关闭全部
-			closeAllTagsView();
-			break;
-		case 4:
 			// 开启当前页面全屏
 			openCurrenFullscreen(getThemeConfig.value.isShareTagsView ? path : url);
 			break;
@@ -544,7 +526,7 @@ onBeforeMount(() => {
 	// 监听布局配置开启 TagsView 共用，为了演示还原默认值
 	mittBus.on('openShareTagsView', () => {
 		if (getThemeConfig.value.isShareTagsView) {
-			router.push('/home');
+			router.push('/system/menu');
 			state.tagsViewList = [];
 			state.tagsViewRoutesList.map((v: RouteItem) => {
 				if (v.meta?.isAffix && !v.meta.isHide) {
