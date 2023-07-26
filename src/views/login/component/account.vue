@@ -33,24 +33,6 @@
 				<el-checkbox> 记住密码 </el-checkbox>
 				<span class="forpwd">忘记密码</span>
 			</div>
-			<!-- <el-col :span="15">
-				<el-input
-					text
-					maxlength="4"
-					:placeholder="$t('message.account.accountPlaceholder3')"
-					v-model="state.ruleForm.code"
-					clearable
-					autocomplete="off"
-				>
-					<template #prefix>
-						<el-icon class="el-input__icon"><ele-Position /></el-icon>
-					</template>
-				</el-input>
-			</el-col>
-			<el-col :span="1"></el-col>
-			<el-col :span="8">
-				<el-button class="login-content-code" v-waves>1234</el-button>
-			</el-col> -->
 		</el-form-item>
 		<el-form-item class="login-animation4">
 			<el-button type="primary" class="login-content-submit" round v-waves @click="onSignIn" :loading="state.loading.signIn">
@@ -73,6 +55,7 @@ import { initBackEndControlRoutes } from '/@/router/backEnd';
 import { Session } from '/@/utils/storage';
 import { formatAxis } from '/@/utils/formatTime';
 import { NextLoading } from '/@/utils/loading';
+import { useLoginApi, useLogin } from '/@/api/login/index.ts';
 
 // 定义变量内容
 const { t } = useI18n();
@@ -83,9 +66,8 @@ const router = useRouter();
 const state = reactive({
 	isShowPassword: false,
 	ruleForm: {
-		userName: 'admin',
-		password: '123456',
-		code: '1234',
+		userName: 'G1657622',
+		password: 'password',
 	},
 	loading: {
 		signIn: false,
@@ -98,21 +80,27 @@ const currentTime = computed(() => {
 });
 // 登录
 const onSignIn = async () => {
-	state.loading.signIn = true;
-	// 存储 token 到浏览器缓存
-	Session.set('token', Math.random().toString(36).substr(0));
-	// 模拟数据，对接接口时，记得删除多余代码及对应依赖的引入。用于 `/src/stores/userInfo.ts` 中不同用户登录判断（模拟数据）
-	Cookies.set('userName', state.ruleForm.userName);
-	if (!themeConfig.value.isRequestRoutes) {
-		// 前端控制路由，2、请注意执行顺序
-		const isNoPower = await initFrontEndControlRoutes();
-		signInSuccess(isNoPower);
-	} else {
-		// 模拟后端控制路由，isRequestRoutes 为 true，则开启后端控制路由
-		// 添加完动态路由，再进行 router 跳转，否则可能报错 No match found for location with path "/"
-		const isNoPower = await initBackEndControlRoutes();
-		// 执行完 initBackEndControlRoutes，再执行 signInSuccess
-		signInSuccess(isNoPower);
+	const { ruleForm } = state;
+	try {
+		state.loading.signIn = true;
+		const res = await useLoginApi(ruleForm);
+		// 存储 token 到浏览器缓存
+		Session.set('token', res.token);
+		Cookies.set('userName', res.userName);
+		if (!themeConfig.value.isRequestRoutes) {
+			// 前端控制路由，2、请注意执行顺序（目前走的这个）
+			const isNoPower = await initFrontEndControlRoutes();
+			signInSuccess(isNoPower);
+		} else {
+			// 模拟后端控制路由，isRequestRoutes 为 true，则开启后端控制路由
+			// 添加完动态路由，再进行 router 跳转，否则可能报错 No match found for location with path "/"
+			const isNoPower = await initBackEndControlRoutes();
+			// 执行完 initBackEndControlRoutes，再执行 signInSuccess
+			signInSuccess(isNoPower);
+		}
+	} catch (err: any) {
+		state.loading.signIn = false;
+		console.log(err);
 	}
 };
 // 登录成功后的跳转

@@ -2,7 +2,7 @@
 	<div class="table-container">
 		<div class="table-footer">
 			<div class="allBtn">
-				<el-button size="default" class="ml10 buttonBorder" @click="onOpenAddRole('add')" color="#1890FF " plain
+				<el-button size="default" class="ml10 buttonBorder" @click="onOpenAddRole('add')" type="primary" plain
 					><el-icon><ele-Plus /></el-icon> 新增</el-button
 				>
 
@@ -12,7 +12,7 @@
 				</el-button>
 			</div>
 			<div class="table-footer-tool">
-				<SvgIcon name="iconfont icon-dayinji" :size="19" title="打印" @click="onPrintTable" />
+				<!-- <SvgIcon name="iconfont icon-dayinji" :size="19" title="打印" @click="onPrintTable" /> -->
 				<SvgIcon name="iconfont icon-btn-daochu" :size="22" title="导出" @click="onImportTable" />
 				<SvgIcon name="iconfont icon-refresh-line" :size="23" title="刷新" @click="onRefreshTable" />
 				<el-popover
@@ -94,7 +94,7 @@
 					</template>
 				</template>
 			</el-table-column>
-			<el-table-column align="center" label="操作" width="250" v-if="config.isOperate">
+			<el-table-column align="center" label="操作" width="240" v-if="config.isOperate">
 				<template v-slot="scope">
 					<el-button color="#39D339" plain class="button buttonBorder"
 						><el-icon><ele-Edit /></el-icon>修改</el-button
@@ -263,8 +263,8 @@ const onPrintTable = () => {
 };
 // 导出
 const onImportTable = () => {
-	if (state.selectlist.length <= 0) return ElMessage.warning('请先选择要导出的数据');
-	table2excel(props.header, state.selectlist, `${themeConfig.value.globalTitle} ${new Date().toLocaleString()}`);
+	// if (state.selectlist.length <= 0) return ElMessage.warning('请先选择要导出的数据');
+	// table2excel(props.header, state.selectlist, `${themeConfig.value.globalTitle} ${new Date().toLocaleString()}`);
 };
 // 刷新
 const onRefreshTable = () => {

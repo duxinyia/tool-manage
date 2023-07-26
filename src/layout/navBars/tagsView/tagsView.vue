@@ -18,7 +18,7 @@
 						}
 					"
 				>
-					<i class="iconfont icon-webicon318 layout-navbars-tagsview-ul-li-iconfont" v-if="isActive(v)"></i>
+					<!-- <i class="iconfont icon-huanfu layout-navbars-tagsview-ul-li-iconfont" v-if="isActive(v)"></i> -->
 					<SvgIcon :name="v.meta.icon" v-if="!isActive(v) && getThemeConfig.isTagsviewIcon" class="pr5" />
 					<span>{{ setTagsViewNameI18n(v) }}</span>
 					<template v-if="isActive(v)">
@@ -81,7 +81,9 @@ const storesKeepALiveNames = useKeepALiveNames();
 const route = useRoute();
 const router = useRouter();
 const state = reactive<TagsViewState>({
+	// 路由高亮
 	routeActive: '',
+	// 当前路由
 	routePath: route.path,
 	dropdown: { x: '', y: '' },
 	sortable: '',
@@ -113,8 +115,7 @@ const isActive = (v: RouteItem) => {
 			// 普通传参
 			return v.url ? v.url === state.routeActive : v.path === state.routeActive;
 		} else {
-			// 通过 name 传参，params 取值，刷新页面参数消失
-			// https://gitee.com/lyt-top/vue-next-admin/issues/I51RS9
+			// 通过 name 传参，params 取值，刷新页面参数消失 一般会执行这个
 			return v.path === state.routePath;
 		}
 	}
@@ -160,13 +161,14 @@ const solveAddTagsView = async (path: string, to?: RouteToFrom) => {
 			)
 	);
 	if (current.length <= 0) {
-		// 防止：Avoid app logic that relies on enumerating keys on a component instance. The keys will be empty in production mode to avoid performance overhead.
+		// 防止：避免依赖于组件实例上的枚举键的应用逻辑。在生产模式下，键将为空，以避免性能开销。 isDynamicPath:当前路由
 		let findItem = state.tagsViewRoutesList.find((v: RouteItem) => v.path === isDynamicPath);
 		if (!findItem) return false;
 		if (findItem.meta.isAffix) return false;
 		if (findItem.meta.isLink && !findItem.meta.isIframe) return false;
 		to?.meta?.isDynamic ? (findItem.params = to.params) : (findItem.query = to?.query);
 		findItem.url = setTagsViewHighlight(findItem);
+		// 将findItem合并到tagsViewList中，增加标签
 		state.tagsViewList.push({ ...findItem });
 		await storesKeepALiveNames.addCachedView(findItem);
 		addBrowserSetSession(state.tagsViewList);
@@ -195,6 +197,7 @@ const addTagsView = (path: string, to?: RouteToFrom) => {
 	nextTick(async () => {
 		// 修复：https://gitee.com/lyt-top/vue-next-admin/issues/I3YX6G
 		let item: RouteItem;
+		// 是否是动态路由
 		if (to?.meta?.isDynamic) {
 			// 动态路由（xxx/:id/:name"）：参数不同，开启多个 tagsview
 			if (!getThemeConfig.value.isShareTagsView) await solveAddTagsView(path, to);
@@ -206,7 +209,7 @@ const addTagsView = (path: string, to?: RouteToFrom) => {
 			}
 			item = state.tagsViewRoutesList.find((v: RouteItem) => v.path === to?.meta?.isDynamicPath);
 		} else {
-			// 普通路由：参数不同，开启多个 tagsview
+			// 普通路由：参数不同，开启多个 tagsview 不共享标签运行了solveAddTagsView
 			if (!getThemeConfig.value.isShareTagsView) await solveAddTagsView(path, to);
 			else await singleAddTagsView(path, to);
 			if (state.tagsViewList.some((v: RouteItem) => v.path === path)) {
@@ -223,6 +226,7 @@ const addTagsView = (path: string, to?: RouteToFrom) => {
 		item.url = setTagsViewHighlight(item);
 		await storesKeepALiveNames.addCachedView(item);
 		await state.tagsViewList.push({ ...item });
+		// 防止首次进入界面时(登录进入) tagsViewList 不存浏览器中
 		await addBrowserSetSession(state.tagsViewList);
 	});
 };
@@ -372,7 +376,7 @@ const onTagsClick = (v: RouteItem, k: number) => {
 		!item.children ? (getThemeConfig.value.isCollapse = true) : (getThemeConfig.value.isCollapse = false);
 	}
 };
-// 处理 url，地址栏链接有参数时，tagsview 右键菜单刷新功能失效问题，感谢 @ZzZz-RIPPER、@dejavuuuuu
+// 处理 url，地址栏链接有参数时，tagsview 右键菜单刷新功能失效问题
 // https://gitee.com/lyt-top/vue-next-admin/issues/I5K3YO
 // https://gitee.com/lyt-top/vue-next-admin/issues/I61VS9
 const transUrlParams = (v: RouteItem) => {
@@ -486,13 +490,20 @@ const getTagsRefsIndex = (path: string | unknown) => {
 const initSortable = async () => {
 	const el = <HTMLElement>document.querySelector('.layout-navbars-tagsview-ul');
 	if (!el) return false;
+	// 销毁拖拽
 	state.sortable.el && state.sortable.destroy();
+	// 用此方法可以初始化一个可排序对象。
 	state.sortable = Sortable.create(el, {
 		animation: 300,
 		dataIdAttr: 'data-url',
+		// 是否开启拖拽
 		disabled: getThemeConfig.value.isSortableTagsView ? false : true,
+		// 元素拖动结束
 		onEnd: () => {
+			console.log(726, state.sortable);
+			console.log(6, state.sortable.toArray());
 			const sortEndList: RouteItem[] = [];
+			// 改变要传给本地缓存的tagsViewList是拖拽顺序一样的
 			state.sortable.toArray().map((val: string) => {
 				state.tagsViewList.map((v: RouteItem) => {
 					if (v.url === val) sortEndList.push({ ...v });
@@ -505,6 +516,7 @@ const initSortable = async () => {
 // 拖动问题，https://gitee.com/lyt-top/vue-next-admin/issues/I3ZRRI
 const onSortableResize = async () => {
 	await initSortable();
+	// 判断是否是移动端
 	if (other.isMobile()) state.sortable.el && state.sortable.destroy();
 };
 // 页面加载前
@@ -537,6 +549,12 @@ onBeforeMount(() => {
 		}
 	});
 });
+// 页面加载时
+onMounted(() => {
+	// 初始化 pinia 中的 tagsViewRoutes 列表
+	getTagsViewRoutes();
+	initSortable();
+});
 // 页面卸载时
 onUnmounted(() => {
 	// 取消非本页面调用监听
@@ -552,16 +570,13 @@ onUnmounted(() => {
 onBeforeUpdate(() => {
 	tagsRefs.value = [];
 });
-// 页面加载时
-onMounted(() => {
-	// 初始化 pinia 中的 tagsViewRoutes 列表
-	getTagsViewRoutes();
-	initSortable();
-});
+
 // 路由更新时（组件内生命钩子）
 onBeforeRouteUpdate(async (to) => {
+	// 处理 tagsView 高亮
 	state.routeActive = setTagsViewHighlight(to);
 	state.routePath = to.meta.isDynamic ? to.meta.isDynamicPath : to.path;
+	// 路由更新时增加标签
 	await addTagsView(to.path, <RouteToFrom>to);
 	getTagsRefsIndex(getThemeConfig.value.isShareTagsView ? state.routePath : state.routeActive);
 });
@@ -580,7 +595,7 @@ watch(
 
 <style scoped lang="scss">
 .layout-navbars-tagsview {
-	background-color: var(--el-color-white);
+	background-color: var(--el-color-primary-light-6);
 	border-bottom: 1px solid var(--next-border-color-light);
 	position: relative;
 	z-index: 4;
@@ -603,10 +618,11 @@ watch(
 			line-height: 26px;
 			display: flex;
 			align-items: center;
+			background-color: var(--el-color-white);
 			border: 1px solid var(--el-border-color-lighter);
 			padding: 0 15px;
 			margin-right: 5px;
-			border-radius: 2px;
+			border-radius: 4px;
 			position: relative;
 			z-index: 0;
 			cursor: pointer;

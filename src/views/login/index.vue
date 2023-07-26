@@ -1,6 +1,7 @@
 <template>
 	<div class="main-login">
 		<div class="login-container"></div>
+		<!-- 公司logo -->
 		<div class="login-top">
 			<div class="login-top-logo">
 				<img :src="logoMini" />
@@ -62,7 +63,7 @@ import { defineAsyncComponent, onMounted, reactive, computed } from 'vue';
 import { storeToRefs } from 'pinia';
 import { useThemeConfig } from '/@/stores/themeConfig';
 import { NextLoading } from '/@/utils/loading';
-import logoMini from '/@/assets/new_logo.png';
+import logoMini from '/@/assets/images/new_logo.png';
 import loginMain from '/@/assets/login-main.svg';
 import loginBg from '/@/assets/login-bg.svg';
 

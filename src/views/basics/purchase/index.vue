@@ -14,7 +14,7 @@
 	</div>
 </template>
 
-<script setup lang="ts" name="purchase">
+<script setup lang="ts" name="basicsPurchase">
 import { defineAsyncComponent, reactive, ref, onMounted } from 'vue';
 import { ElMessage } from 'element-plus';
 
@@ -36,7 +36,7 @@ const state = reactive<TableDemoState>({
 			{ key: 'workno', colWidth: '', title: '工号', type: 'text', isCheck: true },
 			{ key: 'state', colWidth: '', title: '状态', type: 'text', isCheck: true },
 			{ key: 'creat', colWidth: '', title: '创建人', type: 'text', isCheck: true },
-			{ key: 'times', colWidth: '200', title: '创建时间', type: 'text', isCheck: true },
+			{ key: 'times', title: '创建时间', type: 'text', isCheck: true },
 		],
 		// 配置项（必传）
 		config: {

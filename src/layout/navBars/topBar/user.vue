@@ -27,9 +27,9 @@
 		<!-- <div class="layout-navbars-breadcrumb-user-icon" @click="onSearchClick">
 			<i class="iconfont icon-chaxun" :title="$t('message.user.title2')"></i>
 		</div> -->
-		<div class="layout-navbars-breadcrumb-user-icon" @click="onLayoutSetingClick">
+		<!-- <div class="layout-navbars-breadcrumb-user-icon" @click="onLayoutSetingClick">
 			<i class="icon-huanfu iconfont" :title="$t('message.user.title3')"></i>
-		</div>
+		</div> -->
 		<!-- <div class="layout-navbars-breadcrumb-user-icon" ref="userNewsBadgeRef" v-click-outside="onUserNewsClick">
 			<el-badge :is-dot="true">
 				<el-icon :title="$t('message.user.title4')">
@@ -50,7 +50,7 @@
 			<span class="layout-navbars-breadcrumb-user-link">
 				<!-- <img :src="userInfos.photo" class="layout-navbars-breadcrumb-user-link-photo mr5" /> -->
 
-				{{ userInfos.userName === '' ? 'G1656790杜欣怡' : 'G1656790杜欣怡' }}
+				{{ userInfos.userName === '' ? 'admin' : userInfos.userName }}
 				<i class="iconfont icon-user-s userH"></i>
 				<!-- <el-icon class="el-icon--right">
 					<i class="iconfont icon-user-s userH"></i>
@@ -81,7 +81,7 @@ import { useThemeConfig } from '/@/stores/themeConfig';
 import other from '/@/utils/other';
 import mittBus from '/@/utils/mitt';
 import { Session, Local } from '/@/utils/storage';
-import moment from 'moment';
+import { formatDate } from '/@/utils/formatTime';
 
 // 引入组件
 const UserNews = defineAsyncComponent(() => import('/@/layout/navBars/topBar/userNews.vue'));
@@ -114,11 +114,11 @@ const layoutUserFlexNum = computed(() => {
 	else num = '';
 	return num;
 });
-// 获取当前时间
+// 获取当前时间formatDate
 const getCurrentTime = () => {
-	currentTime.value = moment().format('YYYY/MM/DD HH:mm:ss');
+	currentTime.value = formatDate(new Date(), 'YYYY/mm/dd HH:MM:SS');
 	times.value = setInterval(() => {
-		currentTime.value = moment().format('YYYY/MM/DD HH:mm:ss');
+		currentTime.value = formatDate(new Date(), 'YYYY/mm/dd HH:MM:SS');
 	}, 1000);
 };
 // 全屏点击时

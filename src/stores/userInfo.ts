@@ -1,7 +1,6 @@
 import { defineStore } from 'pinia';
 import Cookies from 'js-cookie';
 import { Session } from '/@/utils/storage';
-
 /**
  * 用户信息
  * @methods setUserInfos 设置用户信息
@@ -10,7 +9,6 @@ export const useUserInfo = defineStore('userInfo', {
 	state: (): UserInfosState => ({
 		userInfos: {
 			userName: '',
-			photo: '',
 			time: 0,
 			roles: [],
 			authBtnList: [],
@@ -27,7 +25,6 @@ export const useUserInfo = defineStore('userInfo', {
 			}
 		},
 		// 模拟接口数据
-		// https://gitee.com/lyt-top/vue-next-admin/issues/I5F1HP
 		async getApiUserInfo() {
 			return new Promise((resolve) => {
 				setTimeout(() => {
@@ -45,20 +42,16 @@ export const useUserInfo = defineStore('userInfo', {
 					// test 按钮权限标识
 					let testAuthBtnList: Array<string> = ['btn.add', 'btn.link'];
 					// 不同用户模拟不同的用户权限
-					if (userName === 'admin') {
+					// if (userName === 'admin') {
 						defaultRoles = adminRoles;
 						defaultAuthBtnList = adminAuthBtnList;
-					} else {
-						defaultRoles = testRoles;
-						defaultAuthBtnList = testAuthBtnList;
-					}
+					// } else {
+					// 	defaultRoles = testRoles;
+					// 	defaultAuthBtnList = testAuthBtnList;
+					// }
 					// 用户信息模拟数据
 					const userInfos = {
 						userName: userName,
-						photo:
-							userName === 'admin'
-								? 'https://img2.baidu.com/it/u=1978192862,2048448374&fm=253&fmt=auto&app=138&f=JPEG?w=504&h=500'
-								: 'https://img2.baidu.com/it/u=2370931438,70387529&fm=253&fmt=auto&app=138&f=JPEG?w=500&h=500',
 						time: new Date().getTime(),
 						roles: defaultRoles,
 						authBtnList: defaultAuthBtnList,

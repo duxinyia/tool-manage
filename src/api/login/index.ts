@@ -10,8 +10,15 @@ import request from '/@/utils/request';
 
 export function useLoginApi(params: object) {
 			return request({
-				url: '/Login/InterUserLogin',
-				method: 'get',
+				url: '/api/User/Login',
+				method: 'post',
 				params
 			});
+}
+export function useLogin(params: object) {
+	return request({
+		url: '/Login/InterUserLogin',
+		method: 'get',
+		params
+	});
 }

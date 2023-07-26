@@ -1,15 +1,18 @@
 @import 'mixins/index.scss';
 
 /* Button 按钮
-------------------------------- */
+-------------------------------i.el-icon */
 // 第三方字体图标大小
-.el-button:not(.is-circle) i.el-icon,
+.el-button:not(.is-circle) ,
 .el-button i.iconfont,
 .el-button i.fa,
 .el-button--default i.iconfont,
 .el-button--default i.fa {
 	font-size: 14px !important;
 	margin-right: 5px;
+}
+.is-loading{
+	font-size: 24px !important;
 }
 .el-button--small i.iconfont,
 .el-button--small i.fa {

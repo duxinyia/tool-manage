@@ -2,7 +2,7 @@
 	<div class="system-user-container layout-padding">基础数据</div>
 </template>
 
-<script setup lang="ts" name="systemUser">
+<script setup lang="ts" name="basicsBasic">
 import { defineAsyncComponent, reactive, onMounted, ref } from 'vue';
 import { ElMessageBox, ElMessage } from 'element-plus';
 

@@ -1,6 +1,7 @@
 <template>
 	<div class="layout-navbars-container">
 		<BreadcrumbIndex />
+		<!-- setShowTagsView是否开启标签头 -->
 		<TagsView v-if="setShowTagsView" />
 	</div>
 </template>

@@ -4,11 +4,7 @@
 
 // 用户信息
 declare interface UserInfos<T = any> {
-	// name: string;
-	// paw:string;
-	// SystemName:string
 	authBtnList: string[];
-	photo: string;
 	roles: string[];
 	time: number;
 	userName: string;
@@ -47,6 +43,7 @@ declare interface ThemeConfigState {
 	themeConfig: {
 		isDrawer: boolean;
 		primary: string;
+		danger:string,
 		topBar: string;
 		topBarColor: string;
 		isTopBarColorGradual: boolean;

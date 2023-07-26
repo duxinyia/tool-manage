@@ -6,7 +6,8 @@ import qs from 'qs';
 // 配置新建一个 axios 实例
 const service: AxiosInstance = axios.create({
 	// baseURL: import.meta.env.VITE_API_URL
-	baseURL: 'http://10.151.128.172:8088/',
+	// baseURL: 'http://10.151.128.172:8088/',
+	baseURL: 'http://10.157.189.246:7263/',
 	timeout: 50000,
 	headers: { 'Content-Type': 'application/json' },
 	paramsSerializer: {
@@ -44,8 +45,10 @@ service.interceptors.response.use(
 				ElMessageBox.alert('你已被登出，请重新登录', '提示', {})
 					.then(() => {})
 					.catch(() => {});
+			}else if(res.code===500){
+				ElMessage.error(res.message);
 			}
-			return Promise.reject(service.interceptors.response);
+			return res.data;
 		} else {
 			return res;
 		}

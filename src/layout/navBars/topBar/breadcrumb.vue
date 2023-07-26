@@ -78,7 +78,7 @@ const getBreadcrumbList = (arr: RouteItems) => {
 				state.breadcrumbList.push(item);
 				state.routeSplitIndex++;
 				if (item.children) getBreadcrumbList(item.children);
-			} else if (item.path == '/system') {
+			} else if (item.path == '/basics') {
 				state.breadcrumbList.shift();
 				state.breadcrumbList.unshift({ path: '/', meta: { title: 'message.router.mainHead' } });
 			}

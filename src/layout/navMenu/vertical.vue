@@ -1,7 +1,4 @@
 <template>
-	<!-- <div class="login-top-logo">
-		<img :src="logoMini" />
-	</div> -->
 	<el-menu
 		router
 		:default-active="state.defaultActive"
@@ -39,14 +36,14 @@ import { useRoute, onBeforeRouteUpdate, RouteRecordRaw } from 'vue-router';
 import { storeToRefs } from 'pinia';
 import { useThemeConfig } from '/@/stores/themeConfig';
 import other from '/@/utils/other';
-import logoMini from '/@/assets/new_logo.png';
+import logoMini from '/@/assets/images/new_logo.png';
 
 // 引入组件
 const SubItem = defineAsyncComponent(() => import('/@/layout/navMenu/subItem.vue'));
 
 // 定义父组件传过来的值
 const props = defineProps({
-	// 菜单列表
+	// 所有菜单列表
 	menuList: {
 		type: Array<RouteRecordRaw>,
 		default: () => [],
@@ -58,7 +55,6 @@ const storesThemeConfig = useThemeConfig();
 const { themeConfig } = storeToRefs(storesThemeConfig);
 const route = useRoute();
 const state = reactive({
-	// 修复：https://gitee.com/lyt-top/vue-next-admin/issues/I3YX6G
 	defaultActive: route.meta.isDynamic ? route.meta.isDynamicPath : route.path,
 	isCollapse: false,
 });
@@ -76,6 +72,7 @@ const setParentHighlight = (currentRoute: RouteToFrom) => {
 	const { path, meta } = currentRoute;
 	const pathSplit = meta?.isDynamic ? meta.isDynamicPath!.split('/') : path!.split('/');
 	if (pathSplit.length >= 4 && meta?.isHide) return pathSplit.splice(0, 3).join('/');
+	// 当前上面的路由
 	else return path;
 };
 // 打开外部链接
@@ -86,11 +83,11 @@ const onALinkClick = (val: RouteItem) => {
 onMounted(() => {
 	state.defaultActive = setParentHighlight(route);
 });
-// 路由更新时
+// 路由更新时(切换菜单) 导航守卫，在当前位置即将更新时触发。
 onBeforeRouteUpdate((to) => {
-	// 修复：https://gitee.com/lyt-top/vue-next-admin/issues/I3YX6G
 	state.defaultActive = setParentHighlight(to);
 	const clientWidth = document.body.clientWidth;
+	// 是否开启菜单水平折叠效果
 	if (clientWidth < 1000) themeConfig.value.isCollapse = false;
 });
 // 设置菜单的收起/展开
@@ -104,11 +101,3 @@ watch(
 	}
 );
 </script>
-<style scoped lang="scss">
-.login-top-logo {
-	img {
-		width: 185px;
-		height: 53px;
-	}
-}
-</style>

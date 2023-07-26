@@ -75,7 +75,7 @@ export const dynamicRoutes: Array<RouteRecordRaw> = [
 							isAffix: true,
 							isIframe: false,
 							roles: ['admin'],
-							icon: '',
+							icon: 'iconfont icon-shuxingtu',
 						},
 					},
 					{
@@ -90,7 +90,7 @@ export const dynamicRoutes: Array<RouteRecordRaw> = [
 							isAffix: false,
 							isIframe: false,
 							roles: ['admin'],
-							icon: '',
+							icon: 'iconfont icon-shuxingtu',
 						},
 					},
 					{
@@ -105,7 +105,7 @@ export const dynamicRoutes: Array<RouteRecordRaw> = [
 							isAffix: false,
 							isIframe: false,
 							roles: ['admin'],
-							icon: '',
+							icon: 'iconfont icon-shuxingtu',
 						},
 					},
 					{
@@ -120,7 +120,7 @@ export const dynamicRoutes: Array<RouteRecordRaw> = [
 							isAffix: false,
 							isIframe: false,
 							roles: ['admin'],
-							icon: '',
+							icon: 'iconfont icon-shuxingtu',
 						},
 					},
 					
@@ -145,7 +145,7 @@ export const dynamicRoutes: Array<RouteRecordRaw> = [
 					{
 						path: '/taskList/menu1',
 						name: 'menu1',
-						component: () => import('/@/layout/routerView/parent.vue'),
+						component: () => import('/@/views/menu/menu1/index.vue'),
 						meta: {
 							title: 'message.router.menu1',
 							isLink: '',
@@ -176,10 +176,10 @@ export const dynamicRoutes: Array<RouteRecordRaw> = [
 				],
 			},
 			{
-				path: '/fun',
+				path: '/requisition',
 				name: 'funIndex',
 				component: () => import('/@/layout/routerView/parent.vue'),
-				redirect: '/fun/tagsView',
+				redirect: '/requisition/tagsView',
 				meta: {
 					title: 'message.router.funIndex',
 					isLink: '',
@@ -192,58 +192,27 @@ export const dynamicRoutes: Array<RouteRecordRaw> = [
 				},
 				children: [
 					{
-						path: '/fun/tagsView',
+						path: '/requisition/tagsView',
 						name: 'funTagsView',
 						component: () => import('/@/views/fun/tagsView/index.vue'),
 						meta: {
-							title: 'message.router.funTagsView',
+							title: 'message.router.menu1',
 							isLink: '',
 							isHide: false,
 							isKeepAlive: true,
 							isAffix: false,
 							isIframe: false,
 							roles: ['admin', 'common'],
-							icon: '',
+							icon: 'iconfont icon-shuxingtu',
 						},
-					},
-					// {
-					// 	path: '/fun/countup',
-					// 	name: 'funCountup',
-					// 	component: () => import('/@/views/fun/countup/index.vue'),
-					// 	meta: {
-					// 		title: 'message.router.funCountup',
-					// 		isLink: '',
-					// 		isHide: false,
-					// 		isKeepAlive: true,
-					// 		isAffix: false,
-					// 		isIframe: false,
-					// 		roles: ['admin', 'common'],
-					// 		icon: 'ele-Odometer',
-					// 	},
-					// },
-					// {
-					// 	path: '/fun/wangEditor',
-					// 	name: 'funWangEditor',
-					// 	component: () => import('/@/views/fun/wangEditor/index.vue'),
-					// 	meta: {
-					// 		title: 'message.router.funWangEditor',
-					// 		isLink: '',
-					// 		isHide: false,
-					// 		isKeepAlive: true,
-					// 		isAffix: false,
-					// 		isIframe: false,
-					// 		roles: ['admin', 'common'],
-					// 		icon: 'iconfont icon-fuwenbenkuang',
-					// 	},
-					// },
-				
+					},		
 				],
 			},
 			{
-				path: '/pages',
+				path: '/toolsReturn',
 				name: 'pagesIndex',
 				component: () => import('/@/layout/routerView/parent.vue'),
-				redirect: '/pages/filtering',
+				redirect: '/toolsReturn/filtering',
 				meta: {
 					title: 'message.router.pagesIndex',
 					isLink: '',
@@ -255,15 +224,12 @@ export const dynamicRoutes: Array<RouteRecordRaw> = [
 					icon: 'iconfont icon-tuihuo',
 				},
 				children: [
-					
-
-
 					{
-						path: '/pages/tree',
+						path: '/toolsReturn/tree',
 						name: 'pagesTree',
 						component: () => import('/@/views/pages/tree/index.vue'),
 						meta: {
-							title: 'message.router.pagesTree',
+							title: 'message.router.menu1',
 							isLink: '',
 							isHide: false,
 							isKeepAlive: true,
@@ -277,10 +243,10 @@ export const dynamicRoutes: Array<RouteRecordRaw> = [
 				],
 			},
 			{
-				path: '/make',
+				path: '/statement',
 				name: 'makeIndex',
 				component: () => import('/@/layout/routerView/parent.vue'),
-				redirect: '/make/noticeBar',
+				redirect: '/statement/tableDemo',
 				meta: {
 					title: 'message.router.makeIndex',
 					isLink: '',
@@ -294,11 +260,11 @@ export const dynamicRoutes: Array<RouteRecordRaw> = [
 				children: [
 		
 					{
-						path: '/make/tableDemo',
+						path: '/statement/tableDemo',
 						name: 'makeTableDemo',
 						component: () => import('/@/views/make/tableDemo/index.vue'),
 						meta: {
-							title: 'message.router.makeTableDemo',
+							title: 'message.router.menu1',
 							isLink: '',
 							isHide: false,
 							isKeepAlive: true,
@@ -308,6 +274,26 @@ export const dynamicRoutes: Array<RouteRecordRaw> = [
 							icon: 'iconfont icon-shuju',
 						},
 					},
+				],
+			},
+			{
+				path: '/test',
+				name: 'test',
+				component: () => import('/@/layout/routerView/parent.vue'),
+				redirect: '',
+				meta: {
+					title: '测试',
+					isLink: '',
+					isHide: false,
+					isKeepAlive: true,
+					isAffix: false,
+					isIframe: false,
+					roles: ['admin'],
+					icon: 'iconfont icon-baobiao',
+				},
+				children: [
+		
+					
 				],
 			},
 		],
