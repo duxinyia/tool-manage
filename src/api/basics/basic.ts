@@ -14,3 +14,10 @@ export function getBaseDaListApi(data:Object) {
   	data:data
   });
 }
+export function getBaseDownloadApi() {
+  return request({
+    url: '/api/BaseData/download',
+    method: 'GET',
+    responseType: 'blob', // 设置响应数据类型为 blob
+  });
+}

@@ -50,8 +50,17 @@ export default {
 		creator:'创建人',
 		creationTime:'创建时间',
 		placename:'请输入姓名',
+		name1:'名称',
+		code:'代码',
+		parentNode:'父节点',
+		placeParentNode:'请输入父节点',
+		placeName1:'请输入名称',
+		placeCode:'请输入代码',
+		
 	},
 	hint:{
+		success:'成功!',
+		failure:'失败',
  		suredel:'确定删除吗?',
 		nodata:'暂无数据'
 	}

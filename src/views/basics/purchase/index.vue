@@ -34,7 +34,7 @@ const state = reactive<TableDemoState>({
 			{ key: 'bu', colWidth: '', title: 'message.pages.bu', type: 'text', isCheck: true },
 			{ key: 'name', colWidth: '', title: 'message.pages.name', type: 'text', isCheck: true },
 			{ key: 'workno', colWidth: '', title: 'message.pages.workno', type: 'text', isCheck: true },
-			{ key: 'status', colWidth: '', title: 'message.pages.state', type: 'status', isCheck: true },
+			{ key: 'status', colWidth: '', title: 'message.pages.state', isCheck: true },
 			{ key: 'creat', colWidth: '', title: 'message.pages.creator', type: 'text', isCheck: true },
 			{ key: 'times', title: 'message.pages.creationTime', type: 'text', isCheck: true },
 		],
@@ -59,7 +59,7 @@ const state = reactive<TableDemoState>({
 			pageSize: 10,
 		},
 		// 打印标题
-		printName: 'vueNextAdmin 表格打印演示',
+		printName: '表格打印演示',
 		// 弹窗表单
 		dialogConfig: [{ label: '工号', prop: 'workno', placeholder: '请输入工号', required: true, type: 'input', value: '' }],
 	},

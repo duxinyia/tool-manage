@@ -12,6 +12,9 @@
 				</el-dropdown-menu>
 			</template>
 		</el-dropdown> -->
+		<div class="layout-navbars-breadcrumb-user-icon" @click="onSearchClick">
+			<i class="iconfont icon-chaxun" :title="$t('message.user.title2')"></i>
+		</div>
 		<el-dropdown :show-timeout="70" :hide-timeout="50" trigger="click" @command="onLanguageChange">
 			<div class="layout-navbars-breadcrumb-user-icon">
 				<i class="iconfont" :class="state.disabledI18n === 'en' ? 'icon-fuhao-yingwen' : 'icon-zhongwen'" :title="$t('message.user.title1')"></i>
@@ -24,9 +27,7 @@
 				</el-dropdown-menu>
 			</template>
 		</el-dropdown>
-		<!-- <div class="layout-navbars-breadcrumb-user-icon" @click="onSearchClick">
-			<i class="iconfont icon-chaxun" :title="$t('message.user.title2')"></i>
-		</div> -->
+
 		<!-- <div class="layout-navbars-breadcrumb-user-icon" @click="onLayoutSetingClick">
 			<i class="icon-huanfu iconfont" :title="$t('message.user.title3')"></i>
 		</div> -->

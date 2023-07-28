@@ -47,7 +47,7 @@
 							<div ref="toolSetRef" class="tool-sortable">
 								<div class="tool-sortable-item" v-for="v in header" :key="v.key" :data-key="v.key">
 									<i class="fa fa-arrows-alt handle cursor-pointer"></i>
-									<el-checkbox v-model="v.isCheck" size="default" class="ml12 mr8" :label="v.title" @change="onCheckChange" />
+									<el-checkbox v-model="v.isCheck" size="default" class="ml12 mr8" :label="$t(v.title)" @change="onCheckChange" />
 								</div>
 							</div>
 						</el-scrollbar>
@@ -56,6 +56,7 @@
 			</div>
 		</div>
 		<el-table
+			id="elTable"
 			class="mt12"
 			:data="data"
 			:border="setBorder"
@@ -149,7 +150,6 @@
 import { reactive, computed, nextTick, ref, defineAsyncComponent } from 'vue';
 import { ElMessage } from 'element-plus';
 import printJs from 'print-js';
-import table2excel from 'js-table2excel';
 import Sortable from 'sortablejs';
 import { storeToRefs } from 'pinia';
 import { useThemeConfig } from '/@/stores/themeConfig';
@@ -188,7 +188,7 @@ const props = defineProps({
 });
 
 // 定义子组件向父组件传值/事件
-const emit = defineEmits(['delRow', 'pageChange', 'sortHeader']);
+const emit = defineEmits(['delRow', 'pageChange', 'sortHeader', 'importTable']);
 // 打开新增角色弹窗
 const onOpenAddRole = (type: string) => {
 	roleDialogRef.value.openDialog(type);
@@ -294,8 +294,11 @@ const onPrintTable = () => {
 };
 // 导出
 const onImportTable = () => {
-	// if (state.selectlist.length <= 0) return ElMessage.warning('请先选择要导出的数据');
-	// table2excel(props.header, state.selectlist, `${themeConfig.value.globalTitle} ${new Date().toLocaleString()}`);
+	if (state.selectlist.length <= 0) return ElMessage.warning('请先选择要导出的数据');
+	props.header.forEach((item) => {
+		item.title = t(item.title);
+	});
+	emit('importTable');
 };
 // 刷新
 const onRefreshTable = () => {

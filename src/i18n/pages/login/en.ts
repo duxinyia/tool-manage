@@ -50,8 +50,16 @@ export default {
 		creator:'creator',
 		creationTime:'creation time',
 		placename:'please enter the name',
+		name1:'name',
+		code:'code',
+		parentNode:'parent node',
+		placeParentNode:'please enter the parent node',
+		placeName1:'please enter a name',
+		placeCode:'please enter the code',
 	},
 	hint:{
+		success:'success!',
+		failure:'failure',
  		suredel:'are you sure to delete it?',
 		nodata:'no data for now'
 	}

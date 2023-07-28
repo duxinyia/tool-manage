@@ -108,9 +108,9 @@ const initFormField = () => {
 					state.form[v.prop] = item.value;
 				}
 			});
+			emit('search', state.form);
 		}
 	});
-	emit('search', state.form);
 };
 // 页面加载时
 onMounted(() => {

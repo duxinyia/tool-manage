@@ -35,7 +35,15 @@
 			</div>
 		</el-form-item>
 		<el-form-item class="login-animation4">
-			<el-button type="primary" class="login-content-submit" round v-waves @click="onSignIn(ruleFormRef)" :loading="state.loading.signIn">
+			<el-button
+				type="primary"
+				class="login-content-submit"
+				round
+				v-waves
+				@keyup.enter.native="enterdown"
+				@click="onSignIn(ruleFormRef)"
+				:loading="state.loading.signIn"
+			>
 				<span>{{ state.loading.signIn ? $t('message.account.login') : $t('message.account.accountBtnText') }}</span>
 			</el-button>
 		</el-form-item>
@@ -43,7 +51,7 @@
 </template>
 
 <script setup lang="ts" name="loginAccount">
-import { reactive, computed, ref } from 'vue';
+import { reactive, computed, ref, onMounted, onUnmounted } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { ElMessage } from 'element-plus';
 import { useI18n } from 'vue-i18n';
@@ -56,7 +64,8 @@ import { Session } from '/@/utils/storage';
 import { formatAxis } from '/@/utils/formatTime';
 import { NextLoading } from '/@/utils/loading';
 import { useLoginApi, useLogin } from '/@/api/login/index.ts';
-
+import { encryptData, decryptData } from '/@/utils/aes';
+import { log } from 'console';
 // 定义变量内容
 const { t } = useI18n();
 const storesThemeConfig = useThemeConfig();
@@ -142,6 +151,19 @@ const signInSuccess = (isNoPower: boolean | undefined) => {
 	}
 	state.loading.signIn = false;
 };
+// 按enter键实现登录
+const enterdown = (e) => {
+	if (e.keyCode == 13) {
+		onSignIn(ruleFormRef.value);
+	}
+};
+onMounted(() => {
+	window.addEventListener('keydown', enterdown);
+});
+// 销毁
+onUnmounted(() => {
+	window.removeEventListener('keydown', enterdown, false);
+});
 </script>
 
 <style scoped lang="scss">

@@ -9,6 +9,7 @@
 				@delRow="onTableDelRow"
 				@pageChange="onTablePageChange"
 				@sortHeader="onSortHeader"
+				@importTable="onImportTableData"
 			/>
 		</div>
 	</div>
@@ -17,12 +18,16 @@
 <script setup lang="ts" name="basicsBasic">
 import { defineAsyncComponent, reactive, ref, onMounted } from 'vue';
 import { ElMessage } from 'element-plus';
-import { getParentIdListApi, getBaseDaListApi } from '/@/api/basics/basic.ts';
-
+import { getParentIdListApi, getBaseDaListApi, getBaseDownloadApi } from '/@/api/basics/basic.ts';
+import { useI18n } from 'vue-i18n';
+// 引入导出Excel表格依赖
+import * as FileSaver from 'file-saver';
+import * as XLSX from 'xlsx';
 // 引入组件
 const Table = defineAsyncComponent(() => import('/@/components/table/index.vue'));
 const TableSearch = defineAsyncComponent(() => import('/@/components/search/search.vue'));
 // 定义变量内容
+const { t } = useI18n();
 const tableRef = ref<RefType>();
 const state = reactive<TableDemoState>({
 	tableData: {
@@ -30,8 +35,8 @@ const state = reactive<TableDemoState>({
 		data: [],
 		// 表头内容（必传，注意格式）
 		header: [
-			{ key: 'dataname', colWidth: '', title: '名称', type: 'text', isCheck: true },
-			{ key: 'datacode', colWidth: '', title: '代码', type: 'text', isCheck: true },
+			{ key: 'dataname', colWidth: '', title: 'message.pages.name1', type: 'text', isCheck: true },
+			{ key: 'datacode', colWidth: '', title: 'message.pages.code', type: 'text', isCheck: true },
 			{ key: 'type', colWidth: '', title: 'message.pages.groupType', type: 'text', isCheck: true },
 			{ key: 'runstatus', colWidth: '', title: 'message.pages.state', type: 'status', isCheck: true },
 			{ key: 'creator', colWidth: '', title: 'message.pages.creator', type: 'text', isCheck: true },
@@ -45,14 +50,22 @@ const state = reactive<TableDemoState>({
 			isSerialNo: true, // 是否显示表格序号
 			isSelection: true, // 是否显示表格多选
 			isOperate: true, // 是否显示表格操作栏
-			isEditBtn: false,
+			isEditBtn: false, //是否显示修改按钮
 		},
 		// 搜索表单，动态生成（传空数组时，将不显示搜索，注意格式）
 		search: [
-			{ label: '父节点', prop: 'parentid', placeholder: '请输入父节点', required: false, type: 'select', options: [] },
-			{ label: '名称', prop: 'dataName', placeholder: '请输入名称', required: false, type: 'input' },
-			{ label: '代码', prop: 'dataCode', placeholder: '请输入代码', required: false, type: 'input' },
+			{
+				label: 'message.pages.parentNode',
+				prop: 'parentid',
+				placeholder: 'message.pages.placeParentNode',
+				required: false,
+				type: 'select',
+				options: [],
+			},
+			{ label: 'message.pages.name1', prop: 'dataName', placeholder: 'message.pages.placeName1', required: false, type: 'input' },
+			{ label: 'message.pages.code', prop: 'dataCode', placeholder: 'message.pages.placeCode', required: false, type: 'input' },
 		],
+		// 给后端的数据
 		form: {
 			parentid: '',
 			dataName: '',
@@ -66,7 +79,7 @@ const state = reactive<TableDemoState>({
 		// 打印标题
 		printName: '表格打印演示',
 		// 弹窗表单
-		dialogConfig: [{ label: '工号', prop: 'workno', placeholder: '请输入工号', required: true, type: 'input', value: '' }],
+		dialogConfig: [{ label: '父节点', prop: 'workno', placeholder: '请输入父节点', required: true, type: 'select' }],
 	},
 });
 
@@ -94,13 +107,12 @@ const getSelect = async () => {
 };
 // 搜索点击时表单回调
 const onSearch = (data: EmptyObjectType) => {
-	console.log(5, data);
 	state.tableData.form = Object.assign({}, state.tableData.form, { ...data });
 	tableRef.value.pageReset();
 };
 // 删除当前项回调
 const onTableDelRow = (row: EmptyObjectType) => {
-	ElMessage.success(`删除${row.name}成功！`);
+	ElMessage.success(`${t('message.allButton.deleteBtn')}${row.dataname}${t('message.hint.success')}`);
 	getTableData();
 };
 // 分页改变时回调
@@ -113,10 +125,27 @@ const onTablePageChange = (page: TableDemoPageType) => {
 const onSortHeader = (data: TableHeaderType[]) => {
 	state.tableData.header = data;
 };
+// 导出
+const onImportTableData = async () => {
+	const res = await getBaseDownloadApi();
+	let blob = new Blob([res], {
+		// 这里一定要和后端对应，不然可能出现乱码或者打不开文件
+		type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+	});
+	if (window.navigator.msSaveOrOpenBlob) {
+		navigator.msSaveBlob(blob, fileName);
+	} else {
+		const link = document.createElement('a');
+		link.href = window.URL.createObjectURL(blob);
+		link.download = `${t('message.router.basicsBasic')} ${new Date().toLocaleString()}.xls`; // 在前端也可以设置文件名字
+		link.click();
+		//释放内存
+		window.URL.revokeObjectURL(link.href);
+	}
+};
 // 页面加载时
 onMounted(() => {
 	getSelect();
-	// getTableData();
 });
 </script>
 

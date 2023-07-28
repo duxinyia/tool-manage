@@ -44,8 +44,16 @@ export default {
 		creator:'創建人',
 		creationTime:'創建時間',
 		placename:'請輸入姓名',
+		name1:'名稱',
+		code:'代碼',
+		parentNode:'父節點',
+		placeParentNode:'請輸入父節點',
+		placeName1:'請輸入名稱',
+		placeCode:'請輸入代碼',
 	},
 	hint:{
+		success:'成功!',
+		failure:'失敗',
  		suredel:'確定刪除嗎?',
 		nodata:'暫無數據'
 	}

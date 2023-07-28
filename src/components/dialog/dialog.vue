@@ -10,6 +10,9 @@
 							:rules="[{ required: item.required, message: `${item.label}不能为空`, trigger: item.type === 'input' ? 'blur' : 'change' }]"
 						>
 							<el-input v-if="item.type === 'input'" v-model="state.ruleForm[item.prop]" :placeholder="item.placeholder" clearable></el-input>
+							<el-select v-model="state.ruleForm[item.prop]" :placeholder="item.placeholder" v-if="item.type === 'select'">
+								<el-option v-for="val in item.options" :key="val.value" :label="val.label" :value="val.value"> </el-option>
+							</el-select>
 							<el-switch
 								v-if="item.type === 'switch'"
 								v-model="state.ruleForm[item.prop]"
