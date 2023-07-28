@@ -20,7 +20,7 @@ import { ElMessage } from 'element-plus';
 
 // 引入组件
 const Table = defineAsyncComponent(() => import('/@/components/table/index.vue'));
-const TableSearch = defineAsyncComponent(() => import('./search.vue'));
+const TableSearch = defineAsyncComponent(() => import('/@/components/search/search.vue'));
 // 定义变量内容
 const tableRef = ref<RefType>();
 const state = reactive<TableDemoState>({
@@ -29,14 +29,14 @@ const state = reactive<TableDemoState>({
 		data: [],
 		// 表头内容（必传，注意格式）
 		header: [
-			{ key: 'type', colWidth: '', title: '群组类型', type: 'text', isCheck: true },
-			{ key: 'phone', colWidth: '', title: '厂区', type: 'text', isCheck: true },
-			{ key: 'bu', colWidth: '', title: 'BU', type: 'text', isCheck: true },
-			{ key: 'name', colWidth: '', title: '姓名', type: 'text', isCheck: true },
-			{ key: 'workno', colWidth: '', title: '工号', type: 'text', isCheck: true },
-			{ key: 'state', colWidth: '', title: '状态', type: 'text', isCheck: true },
-			{ key: 'creat', colWidth: '', title: '创建人', type: 'text', isCheck: true },
-			{ key: 'times', title: '创建时间', type: 'text', isCheck: true },
+			{ key: 'type', colWidth: '', title: 'message.pages.groupType', type: 'text', isCheck: true },
+			{ key: 'phone', colWidth: '', title: 'message.pages.factoryarea', type: 'text', isCheck: true },
+			{ key: 'bu', colWidth: '', title: 'message.pages.bu', type: 'text', isCheck: true },
+			{ key: 'name', colWidth: '', title: 'message.pages.name', type: 'text', isCheck: true },
+			{ key: 'workno', colWidth: '', title: 'message.pages.workno', type: 'text', isCheck: true },
+			{ key: 'status', colWidth: '', title: 'message.pages.state', type: 'status', isCheck: true },
+			{ key: 'creat', colWidth: '', title: 'message.pages.creator', type: 'text', isCheck: true },
+			{ key: 'times', title: 'message.pages.creationTime', type: 'text', isCheck: true },
 		],
 		// 配置项（必传）
 		config: {
@@ -46,11 +46,12 @@ const state = reactive<TableDemoState>({
 			isSerialNo: true, // 是否显示表格序号
 			isSelection: true, // 是否显示表格多选
 			isOperate: true, // 是否显示表格操作栏
+			isEditBtn: false,
 		},
 		// 搜索表单，动态生成（传空数组时，将不显示搜索，注意格式）
 		search: [
-			{ label: '工号', prop: 'address', placeholder: '请输入工号', required: false, type: 'input' },
-			{ label: '姓名', prop: 'name', placeholder: '请输入姓名', required: false, type: 'input' },
+			{ label: 'message.pages.workno', prop: 'address', placeholder: 'message.account.accountPlaceholder1', required: false, type: 'input' },
+			{ label: 'message.pages.name', prop: 'name', placeholder: 'message.pages.placename', required: false, type: 'input' },
 		],
 		// 搜索参数（不用传，用于分页、搜索时传给后台的值，`getTableData` 中使用）
 		param: {
@@ -59,6 +60,8 @@ const state = reactive<TableDemoState>({
 		},
 		// 打印标题
 		printName: 'vueNextAdmin 表格打印演示',
+		// 弹窗表单
+		dialogConfig: [{ label: '工号', prop: 'workno', placeholder: '请输入工号', required: true, type: 'input', value: '' }],
 	},
 });
 
@@ -74,7 +77,7 @@ const getTableData = () => {
 			bu: `BU`,
 			name: `张三${i + 1}`,
 			workno: `G16569${i + 1}`,
-			state: `${i % 2 === 0 ? '是' : '否'}`,
+			status: true,
 			creat: `张三${i + 1}`,
 			times: `2023-07-22 11:16:20`,
 		});

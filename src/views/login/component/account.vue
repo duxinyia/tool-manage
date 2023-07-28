@@ -1,13 +1,13 @@
 <template>
-	<el-form size="large" class="login-content-form">
-		<el-form-item class="login-animation1">
+	<el-form ref="ruleFormRef" size="large" class="login-content-form" :model="state.ruleForm">
+		<el-form-item class="login-animation1" prop="userName" :rules="[{ required: true, message: $t('message.account.worknoEmpty') }]">
 			<el-input text :placeholder="$t('message.account.accountPlaceholder1')" v-model="state.ruleForm.userName" clearable autocomplete="off">
 				<template #prefix>
 					<el-icon class="el-input__icon" :size="20"><ele-User /></el-icon>
 				</template>
 			</el-input>
 		</el-form-item>
-		<el-form-item class="login-animation2">
+		<el-form-item class="login-animation2" prop="password" :rules="[{ required: true, message: $t('message.account.passwordEmpty') }]">
 			<el-input
 				:type="state.isShowPassword ? 'text' : 'password'"
 				:placeholder="$t('message.account.accountPlaceholder2')"
@@ -30,20 +30,20 @@
 		<el-form-item class="login-animation3">
 			<!-- 记住密码和忘记密码 -->
 			<div class="pwd-container">
-				<el-checkbox> 记住密码 </el-checkbox>
-				<span class="forpwd">忘记密码</span>
+				<el-checkbox>{{ $t('message.account.remember') }}</el-checkbox>
+				<span class="forpwd" @click="forgetPwd">{{ $t('message.account.forget') }}</span>
 			</div>
 		</el-form-item>
 		<el-form-item class="login-animation4">
-			<el-button type="primary" class="login-content-submit" round v-waves @click="onSignIn" :loading="state.loading.signIn">
-				<span>{{ $t('message.account.accountBtnText') }}</span>
+			<el-button type="primary" class="login-content-submit" round v-waves @click="onSignIn(ruleFormRef)" :loading="state.loading.signIn">
+				<span>{{ state.loading.signIn ? $t('message.account.login') : $t('message.account.accountBtnText') }}</span>
 			</el-button>
 		</el-form-item>
 	</el-form>
 </template>
 
 <script setup lang="ts" name="loginAccount">
-import { reactive, computed } from 'vue';
+import { reactive, computed, ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { ElMessage } from 'element-plus';
 import { useI18n } from 'vue-i18n';
@@ -60,6 +60,7 @@ import { useLoginApi, useLogin } from '/@/api/login/index.ts';
 // 定义变量内容
 const { t } = useI18n();
 const storesThemeConfig = useThemeConfig();
+const ruleFormRef = ref<FormInstance>();
 const { themeConfig } = storeToRefs(storesThemeConfig);
 const route = useRoute();
 const router = useRouter();
@@ -78,30 +79,42 @@ const state = reactive({
 const currentTime = computed(() => {
 	return formatAxis(new Date());
 });
+// 忘记密码：跳转到修改密码系统
+const forgetPwd = () => {
+	window.open('http://10.151.128.172:8089/Login/Repassword');
+};
 // 登录
-const onSignIn = async () => {
+const onSignIn = (formEl: FormInstance | undefined) => {
+	if (!formEl) return;
 	const { ruleForm } = state;
-	try {
-		state.loading.signIn = true;
-		const res = await useLoginApi(ruleForm);
-		// 存储 token 到浏览器缓存
-		Session.set('token', res.token);
-		Cookies.set('userName', res.userName);
-		if (!themeConfig.value.isRequestRoutes) {
-			// 前端控制路由，2、请注意执行顺序（目前走的这个）
-			const isNoPower = await initFrontEndControlRoutes();
-			signInSuccess(isNoPower);
+	formEl.validate(async (valid: boolean) => {
+		if (valid) {
+			try {
+				state.loading.signIn = true;
+				let paw = ruleForm.password.trim();
+				const res = await useLoginApi(ruleForm.userName.trim(), paw);
+				// 存储 token 到浏览器缓存
+				Session.set('token', res.token);
+				Cookies.set('userName', res.userName);
+				Cookies.set('userId', res.userId);
+				if (!themeConfig.value.isRequestRoutes) {
+					// 前端控制路由，2、请注意执行顺序（目前走的这个）
+					const isNoPower = await initFrontEndControlRoutes();
+					signInSuccess(isNoPower);
+				} else {
+					// 模拟后端控制路由，isRequestRoutes 为 true，则开启后端控制路由
+					// 添加完动态路由，再进行 router 跳转，否则可能报错 No match found for location with path "/"
+					const isNoPower = await initBackEndControlRoutes();
+					// 执行完 initBackEndControlRoutes，再执行 signInSuccess
+					signInSuccess(isNoPower);
+				}
+			} catch (err: any) {
+				state.loading.signIn = false;
+				console.log(err);
+			}
 		} else {
-			// 模拟后端控制路由，isRequestRoutes 为 true，则开启后端控制路由
-			// 添加完动态路由，再进行 router 跳转，否则可能报错 No match found for location with path "/"
-			const isNoPower = await initBackEndControlRoutes();
-			// 执行完 initBackEndControlRoutes，再执行 signInSuccess
-			signInSuccess(isNoPower);
 		}
-	} catch (err: any) {
-		state.loading.signIn = false;
-		console.log(err);
-	}
+	});
 };
 // 登录成功后的跳转
 const signInSuccess = (isNoPower: boolean | undefined) => {
@@ -160,7 +173,7 @@ const signInSuccess = (isNoPower: boolean | undefined) => {
 	}
 	.login-content-submit {
 		width: 100%;
-		letter-spacing: 2px;
+		letter-spacing: 23px;
 		font-weight: 600;
 		margin-top: 15px;
 		height: 67px;
@@ -170,6 +183,8 @@ const signInSuccess = (isNoPower: boolean | undefined) => {
 		border-radius: 34px;
 		border: 0px;
 		span {
+			width: 100%;
+			padding-left: 20px;
 			font-size: 30px;
 		}
 	}
@@ -201,9 +216,8 @@ const signInSuccess = (isNoPower: boolean | undefined) => {
 	:deep(.el-input__inner) {
 		margin-left: 20px;
 	}
-	// 	.el-input--large .el-input__wrapper {
-	// 	font-size: 16px;
-	// 	padding: 30px 15px;
-	// }
+	:deep(.el-form-item__error) {
+		left: 16px !important;
+	}
 }
 </style>

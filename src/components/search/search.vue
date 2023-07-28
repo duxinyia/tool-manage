@@ -15,11 +15,11 @@
 				>
 					<template v-if="val.type !== ''">
 						<el-form-item
-							:label="val.label"
+							:label="$t(val.label)"
 							:prop="val.prop"
 							:rules="[{ required: val.required, message: `${val.label}不能为空`, trigger: val.type === 'input' ? 'blur' : 'change' }]"
 						>
-							<el-input v-model="state.form[val.prop]" :placeholder="val.placeholder" clearable v-if="val.type === 'input'" style="width: 100%" />
+							<el-input v-model="state.form[val.prop]" :placeholder="$t(val.placeholder)" clearable v-if="val.type === 'input'" style="width: 100%" />
 							<el-date-picker
 								v-model="state.form[val.prop]"
 								type="date"
@@ -43,10 +43,10 @@
 						</template>
 						<div>
 							<el-button size="default" type="primary" @click="onSearch(tableSearchRef)"
-								><el-icon> <ele-Search /> </el-icon>查询
+								><el-icon> <ele-Search /> </el-icon>{{ $t('message.allButton.searchBtn') }}
 							</el-button>
 							<el-button size="default" type="info" class="ml10" @click="onReset(tableSearchRef)"
-								><el-icon><ele-RefreshLeft /></el-icon> 重置
+								><el-icon><ele-RefreshLeft /></el-icon> {{ $t('message.allButton.resetBtn') }}
 							</el-button>
 						</div>
 					</el-form-item>
@@ -59,6 +59,7 @@
 <script setup lang="ts" name="makeTableDemoSearch">
 import { reactive, ref, onMounted } from 'vue';
 import type { FormInstance } from 'element-plus';
+import { useI18n } from 'vue-i18n';
 
 // 定义父组件传过来的值
 const props = defineProps({
@@ -73,6 +74,7 @@ const props = defineProps({
 const emit = defineEmits(['search']);
 
 // 定义变量内容
+const { t } = useI18n();
 const tableSearchRef = ref<FormInstance>();
 const state = reactive({
 	form: {},
@@ -99,7 +101,16 @@ const onReset = (formEl: FormInstance | undefined) => {
 // 初始化 form 字段，取自父组件 search.prop
 const initFormField = () => {
 	if (props.search.length <= 0) return false;
-	props.search.forEach((v) => (state.form[v.prop] = ''));
+	props.search.forEach((v) => {
+		if (v.type === 'select' && v.options?.length > 0) {
+			v.options?.forEach((item) => {
+				if (item.selected) {
+					state.form[v.prop] = item.value;
+				}
+			});
+		}
+	});
+	emit('search', state.form);
 };
 // 页面加载时
 onMounted(() => {

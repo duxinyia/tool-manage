@@ -10,7 +10,7 @@
 		<div class="login-bottom">
 			<div class="login-right-warp flex-margin">
 				<div class="login-right-warp-mian">
-					<div class="login-right-warp-main-title">{{ getThemeConfig.globalTitle }}</div>
+					<div class="login-right-warp-main-title">{{ $t(getThemeConfig.globalTitle) }}</div>
 					<div class="login-right-warp-main-form">
 						<div>
 							<Account />
@@ -66,11 +66,12 @@ import { NextLoading } from '/@/utils/loading';
 import logoMini from '/@/assets/images/new_logo.png';
 import loginMain from '/@/assets/login-main.svg';
 import loginBg from '/@/assets/login-bg.svg';
-
+import { useI18n } from 'vue-i18n';
 // 引入组件
 const Account = defineAsyncComponent(() => import('/@/views/login/component/account.vue'));
 
 // 定义变量内容
+const { t } = useI18n();
 const storesThemeConfig = useThemeConfig();
 const { themeConfig } = storeToRefs(storesThemeConfig);
 const state = reactive({

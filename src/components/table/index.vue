@@ -3,18 +3,19 @@
 		<div class="table-footer">
 			<div class="allBtn">
 				<el-button size="default" class="ml10 buttonBorder" @click="onOpenAddRole('add')" type="primary" plain
-					><el-icon><ele-Plus /></el-icon> 新增</el-button
+					><el-icon><ele-Plus /></el-icon>{{ $t('message.allButton.addBtn') }}</el-button
 				>
 
 				<el-button size="default" class="ml10 buttonBorder" @click="onOpenAddRole('del')" color="#D33939" plain>
 					<el-icon><ele-Delete /></el-icon>
-					批量删除
+					{{ $t('message.allButton.bulkDeletionBtn') }}
 				</el-button>
 			</div>
 			<div class="table-footer-tool">
 				<!-- <SvgIcon name="iconfont icon-dayinji" :size="19" title="打印" @click="onPrintTable" /> -->
-				<SvgIcon name="iconfont icon-btn-daochu" :size="22" title="导出" @click="onImportTable" />
-				<SvgIcon name="iconfont icon-refresh-line" :size="23" title="刷新" @click="onRefreshTable" />
+				<SvgIcon name="iconfont icon-btn-daoru" :size="22" :title="$t('message.tooltip.import')" />
+				<SvgIcon name="iconfont icon-btn-daochu" :size="22" :title="$t('message.tooltip.export')" @click="onImportTable" />
+				<SvgIcon name="iconfont icon-refresh-line" :size="23" :title="$t('message.tooltip.refresh')" @click="onRefreshTable" />
 				<el-popover
 					placement="top-end"
 					trigger="click"
@@ -25,22 +26,22 @@
 					@show="onSetTable"
 				>
 					<template #reference>
-						<SvgIcon name="iconfont icon-shezhi" :size="20" title="设置" />
+						<SvgIcon name="iconfont icon-shezhi" :size="20" :title="$t('message.tooltip.setting')" />
 					</template>
 					<template #default>
 						<div class="tool-box">
-							<el-tooltip content="拖动进行排序" placement="top-start">
+							<el-tooltip :content="$t('message.pages.dragsort')" placement="top-start">
 								<SvgIcon name="fa fa-question-circle-o" :size="17" class="ml11" color="#909399" />
 							</el-tooltip>
 							<el-checkbox
 								v-model="state.checkListAll"
 								:indeterminate="state.checkListIndeterminate"
 								class="ml10 mr1"
-								label="列显示"
+								:label="$t('message.pages.columndisplay')"
 								@change="onCheckAllChange"
 							/>
-							<el-checkbox v-model="getConfig.isSerialNo" class="ml12 mr1" label="序号" />
-							<el-checkbox v-model="getConfig.isSelection" class="ml12 mr1" label="多选" />
+							<el-checkbox v-model="getConfig.isSerialNo" class="ml12 mr1" :label="$t('message.pages.no')" />
+							<el-checkbox v-model="getConfig.isSelection" class="ml12 mr1" :label="$t('message.pages.moreoptions')" />
 						</div>
 						<el-scrollbar>
 							<div ref="toolSetRef" class="tool-sortable">
@@ -68,7 +69,7 @@
 			@selection-change="onSelectionChange"
 		>
 			<el-table-column type="selection" :reserve-selection="true" width="30" v-if="config.isSelection" />
-			<el-table-column align="center" type="index" label="序号" width="60" v-if="config.isSerialNo" />
+			<el-table-column align="center" type="index" :label="$t('message.pages.no')" width="60" v-if="config.isSerialNo" />
 			<el-table-column
 				align="center"
 				v-for="(item, index) in setHeader"
@@ -76,7 +77,7 @@
 				show-overflow-tooltip
 				:prop="item.key"
 				:width="item.colWidth"
-				:label="item.title"
+				:label="$t(item.title)"
 			>
 				<template v-slot="scope">
 					<template v-if="item.type === 'image'">
@@ -89,27 +90,40 @@
 							fit="cover"
 						/>
 					</template>
+
+					<template v-if="item.type === 'status'">
+						<!-- <el-tag type="success" v-if="scope.row.status === true">启用</el-tag>
+						<el-tag type="info" v-else>禁用</el-tag> -->
+						<el-switch
+							v-model="scope.row[item.key]"
+							inline-prompt
+							:active-text="$t('message.allButton.startup')"
+							:inactive-text="$t('message.allButton.disable')"
+						></el-switch>
+					</template>
+
 					<template v-else>
 						{{ scope.row[item.key] }}
 					</template>
 				</template>
 			</el-table-column>
-			<el-table-column align="center" label="操作" width="240" v-if="config.isOperate">
+
+			<el-table-column align="center" :label="$t('message.pages.operation')" :width="config.isEditBtn ? 240 : 150" v-if="config.isOperate">
 				<template v-slot="scope">
-					<el-button color="#39D339" plain class="button buttonBorder"
-						><el-icon><ele-Edit /></el-icon>修改</el-button
+					<el-button v-if="config.isEditBtn" @click="onOpenEditRole('edit', scope.row)" color="#39D339" plain class="button buttonBorder"
+						><el-icon><ele-Edit /></el-icon>{{ $t('message.allButton.editBtn') }}</el-button
 					>
-					<el-popconfirm title="确定删除吗？" @confirm="onDelRow(scope.row)">
+					<el-popconfirm :title="$t('message.hint.suredel')" @confirm="onDelRow(scope.row)">
 						<template #reference>
 							<el-button class="button buttonBorder" color="#D33939" plain
-								><el-icon><ele-Delete /></el-icon>删除</el-button
+								><el-icon><ele-Delete /></el-icon>{{ $t('message.allButton.deleteBtn') }}</el-button
 							>
 						</template>
 					</el-popconfirm>
 				</template>
 			</el-table-column>
 			<template #empty>
-				<el-empty description="暂无数据" />
+				<el-empty :description="$t('message.hint.nodata')" />
 			</template>
 		</el-table>
 		<div class="footer">
@@ -127,11 +141,12 @@
 			>
 			</el-pagination>
 		</div>
+		<Dialog ref="roleDialogRef" :dialogConfig="dialogConfig" />
 	</div>
 </template>
 
 <script setup lang="ts" name="netxTable">
-import { reactive, computed, nextTick, ref } from 'vue';
+import { reactive, computed, nextTick, ref, defineAsyncComponent } from 'vue';
 import { ElMessage } from 'element-plus';
 import printJs from 'print-js';
 import table2excel from 'js-table2excel';
@@ -139,6 +154,9 @@ import Sortable from 'sortablejs';
 import { storeToRefs } from 'pinia';
 import { useThemeConfig } from '/@/stores/themeConfig';
 import '/@/theme/tableTool.scss';
+import { useI18n } from 'vue-i18n';
+// 引入组件
+const Dialog = defineAsyncComponent(() => import('/@/components/dialog/dialog.vue'));
 
 // 定义父组件传过来的值
 const props = defineProps({
@@ -162,14 +180,27 @@ const props = defineProps({
 		type: String,
 		default: () => '',
 	},
+	// 弹出框内容
+	dialogConfig: {
+		type: Array<EmptyObjectType>,
+		default: () => [],
+	},
 });
 
 // 定义子组件向父组件传值/事件
 const emit = defineEmits(['delRow', 'pageChange', 'sortHeader']);
 // 打开新增角色弹窗
-const onOpenAddRole = (type: string) => {};
+const onOpenAddRole = (type: string) => {
+	roleDialogRef.value.openDialog(type);
+};
+// 打开修改角色弹窗
+const onOpenEditRole = (type: string, row: Object) => {
+	roleDialogRef.value.openDialog(type, row);
+};
 // 定义变量内容
+const { t } = useI18n();
 const toolSetRef = ref();
+const roleDialogRef = ref();
 const storesThemeConfig = useThemeConfig();
 const { themeConfig } = storeToRefs(storesThemeConfig);
 const state = reactive({

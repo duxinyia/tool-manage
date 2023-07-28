@@ -9,6 +9,7 @@ export const useUserInfo = defineStore('userInfo', {
 	state: (): UserInfosState => ({
 		userInfos: {
 			userName: '',
+			userId:'',
 			time: 0,
 			roles: [],
 			authBtnList: [],
@@ -30,6 +31,9 @@ export const useUserInfo = defineStore('userInfo', {
 				setTimeout(() => {
 					// 模拟数据，请求接口时，记得删除多余代码及对应依赖的引入
 					const userName = Cookies.get('userName');
+					const userId = Cookies.get('userId');
+					
+					
 					// 模拟数据
 					let defaultRoles: Array<string> = [];
 					let defaultAuthBtnList: Array<string> = [];
@@ -52,6 +56,7 @@ export const useUserInfo = defineStore('userInfo', {
 					// 用户信息模拟数据
 					const userInfos = {
 						userName: userName,
+						userId:userId,
 						time: new Date().getTime(),
 						roles: defaultRoles,
 						authBtnList: defaultAuthBtnList,

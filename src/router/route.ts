@@ -53,7 +53,7 @@ export const dynamicRoutes: Array<RouteRecordRaw> = [
 				component: () => import('/@/layout/routerView/parent.vue'),
 				redirect: '/basics/purchase',
 				meta: {
-					title: 'message.router.system',
+					title: 'message.router.basics',
 					isLink: '',
 					isHide: false,
 					isKeepAlive: true,
@@ -68,7 +68,7 @@ export const dynamicRoutes: Array<RouteRecordRaw> = [
 						name: 'basicsPurchase',
 						component: () => import('/@/views/basics/purchase/index.vue'),
 						meta: {
-							title: 'message.router.systemMenu',
+							title: 'message.router.basicsPurchase',
 							isLink: '',
 							isHide: false,
 							isKeepAlive: true,
@@ -83,7 +83,7 @@ export const dynamicRoutes: Array<RouteRecordRaw> = [
 						name: 'basicsObject',
 						component: () => import('/@/views/basics/object/index.vue'),
 						meta: {
-							title: 'message.router.systemRole',
+							title: 'message.router.basicsObject',
 							isLink: '',
 							isHide: false,
 							isKeepAlive: true,
@@ -98,7 +98,7 @@ export const dynamicRoutes: Array<RouteRecordRaw> = [
 						name: 'basicsBasic',
 						component: () => import('/@/views/basics/basic/index.vue'),
 						meta: {
-							title: 'message.router.systemUser',
+							title: 'message.router.basicsBasic',
 							isLink: '',
 							isHide: false,
 							isKeepAlive: true,
@@ -113,7 +113,7 @@ export const dynamicRoutes: Array<RouteRecordRaw> = [
 						name: 'basicsCode',
 						component: () => import('/@/views/basics/code/index.vue'),
 						meta: {
-							title: 'message.router.systemDept',
+							title: 'message.router.basicsCode',
 							isLink: '',
 							isHide: false,
 							isKeepAlive: true,
@@ -132,7 +132,7 @@ export const dynamicRoutes: Array<RouteRecordRaw> = [
 				component: () => import('/@/layout/routerView/parent.vue'),
 				redirect: '/taskList/menu1',
 				meta: {
-					title: 'message.router.menu',
+					title: 'message.router.taskList',
 					isLink: '',
 					isHide: false,
 					isKeepAlive: true,
@@ -177,11 +177,11 @@ export const dynamicRoutes: Array<RouteRecordRaw> = [
 			},
 			{
 				path: '/requisition',
-				name: 'funIndex',
+				name: 'requisition',
 				component: () => import('/@/layout/routerView/parent.vue'),
 				redirect: '/requisition/tagsView',
 				meta: {
-					title: 'message.router.funIndex',
+					title: 'message.router.requisition',
 					isLink: '',
 					isHide: false,
 					isKeepAlive: true,
@@ -210,11 +210,11 @@ export const dynamicRoutes: Array<RouteRecordRaw> = [
 			},
 			{
 				path: '/toolsReturn',
-				name: 'pagesIndex',
+				name: 'toolsReturn',
 				component: () => import('/@/layout/routerView/parent.vue'),
 				redirect: '/toolsReturn/filtering',
 				meta: {
-					title: 'message.router.pagesIndex',
+					title: 'message.router.toolsReturn',
 					isLink: '',
 					isHide: false,
 					isKeepAlive: true,
@@ -243,12 +243,12 @@ export const dynamicRoutes: Array<RouteRecordRaw> = [
 				],
 			},
 			{
-				path: '/statement',
-				name: 'makeIndex',
+				path: '/report',
+				name: 'report',
 				component: () => import('/@/layout/routerView/parent.vue'),
 				redirect: '/statement/tableDemo',
 				meta: {
-					title: 'message.router.makeIndex',
+					title: 'message.router.report',
 					isLink: '',
 					isHide: false,
 					isKeepAlive: true,
@@ -260,7 +260,7 @@ export const dynamicRoutes: Array<RouteRecordRaw> = [
 				children: [
 		
 					{
-						path: '/statement/tableDemo',
+						path: '/report/tableDemo',
 						name: 'makeTableDemo',
 						component: () => import('/@/views/make/tableDemo/index.vue'),
 						meta: {
@@ -276,26 +276,26 @@ export const dynamicRoutes: Array<RouteRecordRaw> = [
 					},
 				],
 			},
-			{
-				path: '/test',
-				name: 'test',
-				component: () => import('/@/layout/routerView/parent.vue'),
-				redirect: '',
-				meta: {
-					title: '测试',
-					isLink: '',
-					isHide: false,
-					isKeepAlive: true,
-					isAffix: false,
-					isIframe: false,
-					roles: ['admin'],
-					icon: 'iconfont icon-baobiao',
-				},
-				children: [
+			// {
+			// 	path: '/test',
+			// 	name: 'test',
+			// 	component: () => import('/@/layout/routerView/parent.vue'),
+			// 	redirect: '',
+			// 	meta: {
+			// 		title: '测试',
+			// 		isLink: '',
+			// 		isHide: false,
+			// 		isKeepAlive: true,
+			// 		isAffix: false,
+			// 		isIframe: false,
+			// 		roles: ['admin'],
+			// 		icon: 'iconfont icon-baobiao',
+			// 	},
+			// 	children: [
 		
 					
-				],
-			},
+			// 	],
+			// },
 		],
 	},
 ];

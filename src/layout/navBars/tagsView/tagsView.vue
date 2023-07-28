@@ -494,16 +494,16 @@ const initSortable = async () => {
 	state.sortable.el && state.sortable.destroy();
 	// 用此方法可以初始化一个可排序对象。
 	state.sortable = Sortable.create(el, {
+		// ms, number 单位：ms，定义排序动画的时间
 		animation: 300,
 		dataIdAttr: 'data-url',
 		// 是否开启拖拽
 		disabled: getThemeConfig.value.isSortableTagsView ? false : true,
 		// 元素拖动结束
 		onEnd: () => {
-			console.log(726, state.sortable);
-			console.log(6, state.sortable.toArray());
 			const sortEndList: RouteItem[] = [];
 			// 改变要传给本地缓存的tagsViewList是拖拽顺序一样的
+			// 序列化可排序的列表单元的data-id（可通过配置项中dataIdAttr修改）放入一个数组，并返回这个数组中(Sortable.js插件内置方法)
 			state.sortable.toArray().map((val: string) => {
 				state.tagsViewList.map((v: RouteItem) => {
 					if (v.url === val) sortEndList.push({ ...v });
@@ -513,7 +513,7 @@ const initSortable = async () => {
 		},
 	});
 };
-// 拖动问题，https://gitee.com/lyt-top/vue-next-admin/issues/I3ZRRI
+// 拖动问题
 const onSortableResize = async () => {
 	await initSortable();
 	// 判断是否是移动端
@@ -523,7 +523,7 @@ const onSortableResize = async () => {
 onBeforeMount(() => {
 	// 初始化，防止手机端直接访问时还可以拖拽
 	onSortableResize();
-	// 拖动问题，https://gitee.com/lyt-top/vue-next-admin/issues/I3ZRRI
+	// 拖动问题
 	window.addEventListener('resize', onSortableResize);
 	// 监听非本页面调用 0 刷新当前，1 关闭当前，2 关闭其它，3 关闭全部 4 当前页全屏
 	mittBus.on('onCurrentContextmenuClick', (data: RouteItem) => {

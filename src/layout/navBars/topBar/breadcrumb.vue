@@ -142,7 +142,8 @@ onBeforeRouteUpdate((to) => {
 		font-weight: unset !important;
 		color: var(--next-bg-topBarColor);
 		&:hover {
-			color: var(--el-color-primary) !important;
+			font-weight: 700;
+			// color: var(--el-color-primary) !important;
 		}
 	}
 }
